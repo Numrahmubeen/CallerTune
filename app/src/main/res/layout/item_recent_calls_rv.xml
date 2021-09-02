@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_margin="@dimen/_5sdp"
+    android:id="@+id/item_recent_calls_rv"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="@dimen/_15sdp"
+        android:layout_height="@dimen/_15sdp"
+        android:id="@+id/callType_iv"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_call_recieved"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/caller_tv"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp"
+        android:layout_marginLeft="@dimen/_10ssp"
+        android:layout_toRightOf="@+id/callType_iv"
+        android:text="Caller Name"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:id="@+id/ll"
+        android:orientation="vertical"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:visibility="gone"
+            android:id="@+id/callSim_iv"
+            android:layout_gravity="right" />
+
+        <TextView
+            android:id="@+id/callTime_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4:38 am"
+            android:textColor="@color/gray" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginLeft="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_below="@+id/ll"
+        android:background="@color/light_gray"/>
+
+</RelativeLayout>

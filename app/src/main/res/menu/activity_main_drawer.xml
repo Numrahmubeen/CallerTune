@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_schedule_activate"
+            android:icon="@drawable/ic_schedule"
+            android:title="Schedule Activate" />
+        <item
+            android:id="@+id/nav_upgrade"
+            android:icon="@drawable/ic_money"
+            android:title="Upgrade to Premium" />
+        <item
+            android:id="@+id/nav_faq"
+            android:icon="@drawable/ic_contact_support"
+            android:title="FAQ" />
+    </group>
+
+    <item android:title="Others">
+        <menu>
+            <item
+                android:id="@+id/nav_rate_us"
+                android:icon="@drawable/ic_thumb_up"
+                android:title="Rate Us" />
+            <item
+                android:id="@+id/nav_info"
+                android:icon="@drawable/ic_info"
+                android:title="Developer &amp; Other Apps" />
+            <item
+                android:id="@+id/nav_invite_friends"
+                android:icon="@drawable/ic_share"
+                android:title="Invite Friends" />
+
+        </menu>
+    </item>
+
+</menu>

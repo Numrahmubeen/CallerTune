@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_add_contact_manually"
+        android:orderInCategory="100"
+        android:title="Add Contact Manually"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="Settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/ring_all"
+        android:orderInCategory="100"
+        android:title="Ring All"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/vibrate_all"
+        android:orderInCategory="100"
+        android:title="Vibrate All"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mute_all"
+        android:orderInCategory="100"
+        android:title="Mute All"
+        app:showAsAction="never" />
+</menu>

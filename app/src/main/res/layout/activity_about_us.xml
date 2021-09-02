@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AboutUsActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:textSize="@dimen/_16ssp"
+        android:text="AppSuite is a mobile app development company mainly focused on Android Platform"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:textSize="@dimen/_18ssp"
+        android:textColor="#ff0000"
+        android:text="Contact Us: "/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fb_tv"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:textColor="#0000ff"
+        android:text="AppSuite Facebook Page"
+        android:drawableLeft="@drawable/ic_facebook"
+        android:drawablePadding="@dimen/_10sdp"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10ssp"
+        android:textColor="#237E23"
+        android:text="appsuiteco@gmail.com"
+        android:drawableLeft="@drawable/ic_gmail"
+        android:drawablePadding="@dimen/_10sdp"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:textSize="@dimen/_18ssp"
+        android:textColor="#ff0000"
+        android:text="OTHER APPS: "/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_150sdp"
+        android:src="@drawable/image_compressor_app_cover"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_10sdp"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="#237E23"
+        android:text="REDUCE IMAGE SIZE - IMAGE COMPRESSOR"/>
+</LinearLayout>
