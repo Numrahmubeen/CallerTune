@@ -82,33 +82,7 @@ public class ChooseContactsActivity extends AppCompatActivity implements LoaderC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_contacts);
-//        ActivityResultLauncher<String> requestPermissionLauncher =
-//                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-//                    if (isGranted) {
-//                        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                contactList = getContacts();
-//                                setupAdapter();
-//                            }
-//                        }, 1);
-//                    } else {
-//                        Toast.makeText(this, "Permission is required to Select from contacts", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//        if (ContextCompat.checkSelfPermission(this, READ_CONTACTS) != PERMISSION_GRANTED) {
-//            requestPermissionLauncher.launch(READ_CONTACTS);
-//        }
-//        else {
-//            new Handler(Looper.myLooper()).postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    contactList = getContacts();
-//                    setupAdapter();
-//                }
-//            }, 1);
-//        }
+
         toolbar = findViewById(R.id.myToolbar);
         noContacts_tv = findViewById(R.id.noContact);
         setSupportActionBar(toolbar);

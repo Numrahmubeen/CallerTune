@@ -13,6 +13,13 @@ public class ContactModel
         private String photoUri;
         private String callRingMode, msgRingMode;
 
+        public ContactModel(String name, String mobileNumber, Bitmap photo, String msgRingMode) {
+                this.name = name;
+                this.mobileNumber = mobileNumber;
+                this.photo = photo;
+                this.msgRingMode = msgRingMode;
+        }
+
         public String getCallRingMode() {
                 return callRingMode;
         }
