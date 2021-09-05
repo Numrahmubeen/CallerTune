@@ -200,7 +200,6 @@ public class CallActivity extends AppCompatActivity {
                 if(r.isPlaying())
                     r.stop();
             }
-
         }
         if(state == Call.STATE_DISCONNECTED)
         {
