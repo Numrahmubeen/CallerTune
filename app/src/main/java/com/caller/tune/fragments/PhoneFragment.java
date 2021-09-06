@@ -44,6 +44,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -118,6 +119,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
             dialPad_cl.setVisibility(View.VISIBLE);
             showDialPad_iv.setVisibility(View.GONE);
         });
+
 
         return view;
     }
@@ -356,9 +358,19 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
                 break;
             case R.id.btnDel:
                 int pos = screen.getSelectionStart();
+                int startSelection= screen.getSelectionStart();
+                int endSelection= screen.getSelectionEnd();
+                String selectedText = screen.getText().toString().substring(startSelection, endSelection);
+
                 if (pos > 0) {
                     screen.setText(screen.getText().delete(pos - 1, pos).toString());
                     screen.setSelection(pos - 1);
+                }
+                else if(!selectedText.isEmpty())
+                {
+                    //If you wish to delete the selected text
+                    String selectionDeletedString= screen.getText().toString().replace(selectedText,"");
+                    screen.setText(selectionDeletedString);
                 }
                 break;
 //            case R.id.btnClr:

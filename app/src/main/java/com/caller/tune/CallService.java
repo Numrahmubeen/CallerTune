@@ -16,7 +16,6 @@ public class CallService extends InCallService {
     public void onCallAdded(Call call) {
         new OngoingCall().setCall(call);
         CallActivity.start(this, call);
-
     }
 
     @Override

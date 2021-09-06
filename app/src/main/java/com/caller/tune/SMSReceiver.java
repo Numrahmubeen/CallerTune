@@ -92,12 +92,12 @@ public class SMSReceiver extends BroadcastReceiver {
 
             if(context.startService(intent) != null)
             {
-                contactModel = retrieveContactPhoto(context,senderNo);
+                contactModel = retrieveContactInfo(context,senderNo);
                 contactModel.setMsgRingMode(msg);
                 context.stopService(intent);
             }
             else {
-            contactModel = retrieveContactPhoto(context,senderNo);
+            contactModel = retrieveContactInfo(context,senderNo);
             contactModel.setMsgRingMode(msg);
             }
             context.startService(intent);
@@ -139,7 +139,7 @@ public class SMSReceiver extends BroadcastReceiver {
 //        notification = mBuilder.build();
 //        notificationManager.notify(NotificationID, notification);
     }
-    public static ContactModel retrieveContactPhoto(Context context, String number) {
+    public static ContactModel retrieveContactInfo(Context context, String number) {
         ContactModel contactModel = new ContactModel();
         ContentResolver contentResolver = context.getContentResolver();
         String contactId = null;

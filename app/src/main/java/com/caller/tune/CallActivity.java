@@ -21,6 +21,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +41,8 @@ public class CallActivity extends AppCompatActivity {
 
     private CompositeDisposable disposables = new CompositeDisposable();
     public static String number;
-    private Button answer, hangup;
-    private TextView callInfo;
+    private ImageView answer, hangup, caller_iv;
+    private TextView callState_tv, callerName_tv;
     private ArrayList<ContactModel> priorityContactsList;
     private MyDbHandler db;
     private boolean isIncomingNumberPriority = false;
@@ -73,7 +74,10 @@ public class CallActivity extends AppCompatActivity {
 
         answer = findViewById(R.id.answer);
         hangup = findViewById(R.id.hangup);
-        callInfo = findViewById(R.id.callInfo);
+        callState_tv = findViewById(R.id.phone_state_tv);
+        callerName_tv = findViewById(R.id.caller_name_tv);
+        caller_iv = findViewById(R.id.caller_iv);
+
         db = new MyDbHandler(CallActivity.this);
         priorityContactsList = db.getAllContacts();
         number = getIntent().getData().getSchemeSpecificPart();
@@ -187,12 +191,14 @@ public class CallActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void updateUi(Integer state) {
         // Set callInfo text by the state
-        callInfo.setText(CallStateString.asString(state).toLowerCase()+"\n"+number);
+
+        callState_tv.setText(CallStateString.asString(state).toLowerCase()+"\n"+number);
 
         if (state == Call.STATE_RINGING)
         {
             managePriorityContacts();
             answer.setVisibility(View.VISIBLE);
+
         }
         else{
             answer.setVisibility(View.GONE);
