@@ -36,7 +36,7 @@
         <activity
             android:name=".ChooseContactsActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
-        <activity android:name=".CallActivity" />
+        <activity android:name=".CallActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">

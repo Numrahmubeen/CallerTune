@@ -4,9 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
@@ -14,13 +19,16 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.telecom.Call;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +37,8 @@ import com.caller.tune.data.MyDbHandler;
 import com.caller.tune.models.ContactModel;
 import com.caller.tune.params.Params;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +60,9 @@ public class CallActivity extends AppCompatActivity {
     private int ringerMode, requiredRingMode;
     private String ringerModeName;
     private AudioManager am;
+    private Chronometer chronometer;
     Ringtone r;
+    boolean isTimerOn = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +89,7 @@ public class CallActivity extends AppCompatActivity {
         callState_tv = findViewById(R.id.phone_state_tv);
         callerName_tv = findViewById(R.id.caller_name_tv);
         caller_iv = findViewById(R.id.caller_iv);
+        chronometer = findViewById(R.id.chronometer);
 
         db = new MyDbHandler(CallActivity.this);
         priorityContactsList = db.getAllContacts();
@@ -191,14 +204,25 @@ public class CallActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void updateUi(Integer state) {
         // Set callInfo text by the state
-
-        callState_tv.setText(CallStateString.asString(state).toLowerCase()+"\n"+number);
+        ContactModel contact = retrieveContactInfo(this,number);
+        if(contact != null && contact.getName() != null)
+        {
+            callerName_tv.setText(contact.getName());
+            if(contact.getPhoto() != null)
+                caller_iv.setImageBitmap(contact.getPhoto());
+        }
+        else {
+            callerName_tv.setText(number);
+            caller_iv.setVisibility(View.GONE);
+        }
+//        callState_tv.setText(CallStateString.asString(state).toLowerCase()+"\n"+number);
 
         if (state == Call.STATE_RINGING)
         {
             managePriorityContacts();
             answer.setVisibility(View.VISIBLE);
-
+            callState_tv.setText("Incoming Call");
+            isTimerOn = false;
         }
         else{
             answer.setVisibility(View.GONE);
@@ -207,8 +231,26 @@ public class CallActivity extends AppCompatActivity {
                     r.stop();
             }
         }
+
+        if(state == Call.STATE_DIALING){
+            callState_tv.setText("Calling..");
+            isTimerOn = false;
+        }
+
+        if(state == Call.STATE_ACTIVE){
+            callState_tv.setVisibility(View.GONE);
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+            chronometer.setVisibility(View.VISIBLE);
+            isTimerOn = true;
+        }
+
         if(state == Call.STATE_DISCONNECTED)
         {
+            chronometer.stop();
+            if(isTimerOn)
+                Toast.makeText(this, "Call Ended "+ chronometer.getText().toString(), Toast.LENGTH_SHORT).show();
+
             if(ringerMode != requiredRingMode)
             {
                 am.setRingerMode(ringerMode);
@@ -217,12 +259,57 @@ public class CallActivity extends AppCompatActivity {
                     Toast.makeText(this, "Ringer Mode Changed to: "+ ringerModeName, Toast.LENGTH_SHORT).show();
                 }
             }
+
         }
 
         if (state == Call.STATE_DIALING || state == Call.STATE_RINGING || state == Call.STATE_ACTIVE)
             hangup.setVisibility(View.VISIBLE);
         else
             hangup.setVisibility(View.GONE);
+    }
+    public static ContactModel retrieveContactInfo(Context context, String number) {
+        ContactModel contactModel = new ContactModel();
+        ContentResolver contentResolver = context.getContentResolver();
+        String contactId = null;
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
+
+        Cursor cursor =
+                contentResolver.query(
+                        uri,
+                        projection,
+                        null,
+                        null,
+                        null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+                contactModel.setName(cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME)));
+            }
+            cursor.close();
+        }
+
+        Bitmap photo;
+
+        try {
+            if(contactId != null) {
+                InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(context.getContentResolver(),
+                        ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(contactId)));
+
+                if (inputStream != null) {
+                    photo = BitmapFactory.decodeStream(inputStream);
+                    inputStream.close();
+                    contactModel.setPhoto(photo);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //  ContactModel contactModel = new ContactModel("name","number",photo,myMsg);
+        contactModel.setMobileNumber(number);
+        return contactModel;
     }
 
     @Override

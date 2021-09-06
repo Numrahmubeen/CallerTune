@@ -19,16 +19,29 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_20sdp"
         android:text="Incoming Call"/>
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:drawableLeft="@drawable/ic_phone"
+        android:drawablePadding="@dimen/_8sdp"
+        android:textSize="@dimen/_14ssp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_20sdp"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_18ssp"
-        android:layout_below="@id/phone_state_tv"
+        android:layout_below="@id/chronometer"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:id="@+id/caller_name_tv"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_50sdp"
         android:text="Caller Name or Number"/>
     <ImageView
         android:layout_width="@dimen/_60sdp"
