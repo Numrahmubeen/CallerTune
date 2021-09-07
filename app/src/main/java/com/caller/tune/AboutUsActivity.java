@@ -8,19 +8,22 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutUsActivity extends AppCompatActivity {
-    TextView fb_tv;
+    LinearLayout fb_ll, gMail_ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
 
-        fb_tv = findViewById(R.id.fb_tv);
-        fb_tv.setOnClickListener(v -> {
+        fb_ll = findViewById(R.id.fb_ll);
+        gMail_ll = findViewById(R.id.gmail_ll);
+
+        fb_ll.setOnClickListener(v -> {
             if (isAppInstalled()) {
                 Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
                 String facebookUrl = getFacebookPageURL(this);
@@ -30,6 +33,29 @@ public class AboutUsActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "facebook app not installing", Toast.LENGTH_SHORT).show();
             }
+        });
+        gMail_ll.setOnClickListener(v -> {
+            String to = "appsuiteco@gmail.com";
+            String subject = "I'd like to contact from Priority Contacts";
+            String msg = "Hello AppSuite," +
+                    "\n \n \n \n \n" +
+                    "Best regards \n" +
+                    "User Name";
+            Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
+            selectorIntent.setData(Uri.parse("mailto:"));
+
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+            emailIntent.putExtra(Intent.EXTRA_TEXT, msg);
+            emailIntent.setSelector(selectorIntent);
+
+            try {
+                startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
     public static String FACEBOOK_URL = "https://www.facebook.com/AppSuiteCo";
