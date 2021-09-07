@@ -15,6 +15,7 @@
     <color name="sim_two">#033303</color>
     <color name="missed_call">#A10D0D</color>
     <color name="outgoing_call">#FF00FF00</color>
+    <color name="green">#FF00FF00</color>
     <color name="receive_call">#FF0000FF</color>
     <color name="gray_call">#807B7B</color>
 

@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.READ_CALL_LOG,
             Manifest.permission.WRITE_CALL_LOG,
             Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.SEND_SMS
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.MODIFY_AUDIO_SETTINGS
     };
 
     @Override

@@ -29,7 +29,6 @@ public final class OngoingCall {
             value.registerCallback(callback);
             state.onNext(value.getState());
         }
-
         call = value;
     }
 
@@ -39,6 +38,14 @@ public final class OngoingCall {
         call.answer(0);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void hold() {
+        call.hold();
+    }
+
+    public static void unHold() {
+        call.unhold();
+    }
 
 
     // Hangup the call

@@ -43,7 +43,7 @@
         android:id="@+id/caller_name_tv"
         android:layout_marginTop="@dimen/_50sdp"
         android:text="Caller Name or Number"/>
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_60sdp"
         android:layout_below="@id/caller_name_tv"
@@ -56,12 +56,13 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/ringing_ll"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/_80sdp"
         android:orientation="horizontal">
         <ImageView
-            android:id="@+id/answer"
+            android:id="@+id/answer_call_iv"
             android:background="@drawable/circle_bg"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
@@ -71,7 +72,7 @@
             android:padding="@dimen/_8sdp"/>
 
         <ImageView
-            android:id="@+id/hangup"
+            android:id="@+id/reject_call_iv"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:src="@drawable/ic_end_call"
@@ -80,6 +81,78 @@
             android:background="@drawable/circle_bg"
             android:text="Hang up" />
     </LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/inCall_cv"
+        app:cardCornerRadius="@dimen/_8sdp"
+        android:alpha="0.8"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_80sdp"
+        android:elevation="@dimen/_5sdp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/_20sdp"
+            android:weightSum="3">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/speaker_on_tv"
+                android:textColor="@color/black"
+                android:drawableTint="@color/black"
+                android:drawablePadding="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_volume_up"
+                android:text="Speaker"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/hold_call_tv"
+                android:textColor="@color/black"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableTint="@color/black"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_pause"
+                android:text="Hold Call"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/mute_call_tv"
+                android:textColor="@color/black"
+                android:drawablePadding="@dimen/_5sdp"
+                android:drawableTint="@color/black"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_mic_off"
+                android:text="Mute"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:id="@+id/hangUp_call_iv"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_end_call"
+            android:backgroundTint="#ff0000"
+            app:tint="@color/white"
+            android:background="@drawable/circle_bg"
+            android:padding="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
 
 
 </RelativeLayout>

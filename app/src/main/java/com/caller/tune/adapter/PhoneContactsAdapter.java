@@ -62,7 +62,9 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
         ContactViewHolder holder = (ContactViewHolder) vholder;
 
         holder.contactName.setText(result.getName());
-        holder.contactNumber.setText(result.getMobileNumber());
+        String str = result.getMobileNumber().replaceAll("\\s", "");
+        str = str.replaceAll("-","");
+        holder.contactNumber.setText(str);
         holder.bind(result);
 
     }
@@ -79,7 +81,9 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
         } else{
             text = text.toLowerCase();
             for(ContactModel item: listSearch){
-                if(item.getName().toLowerCase().replaceAll("\\p{Z}","").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\p{Z}","").contains(text)){
+                String str = item.getMobileNumber().replaceAll("\\s", "");
+                str = str.replaceAll("-","");
+                if(str.contains(text)){
                     contactsList.add(item);
                 }
             }

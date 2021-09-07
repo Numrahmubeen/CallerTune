@@ -11,9 +11,12 @@ import com.caller.tune.OngoingCall;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class CallService extends InCallService {
+    public static CallService sInstance;
+
 
     @Override
     public void onCallAdded(Call call) {
+        sInstance = this;
         new OngoingCall().setCall(call);
         CallActivity.start(this, call);
     }
@@ -21,5 +24,9 @@ public class CallService extends InCallService {
     @Override
     public void onCallRemoved(Call call) {
         new OngoingCall().setCall(null);
+    }
+
+    public static CallService getInstance(){
+        return sInstance;
     }
 }

@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.telecom.PhoneAccountHandle;
@@ -109,6 +110,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
         View view = inflater.inflate(R.layout.fragment_phone, container, false);
         initializeView(view);
 
+        setupAdapter();
         setupSearchRV();
 
         if (ContextCompat.checkSelfPermission(getContext(), CALL_PHONE) != PERMISSION_GRANTED) {
@@ -122,6 +124,18 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
 
 
         return view;
+    }
+    String retrieveLastCallSummary() {
+        String phNumber = null;
+        Uri contacts = CallLog.Calls.CONTENT_URI;
+        Cursor managedCursor = getContext().getContentResolver().query(
+                contacts, null, null, null, null);
+        int number = managedCursor.getColumnIndex( CallLog.Calls.NUMBER );
+        if( managedCursor.moveToFirst() == true ) {
+             phNumber = managedCursor.getString( number );
+        }
+        managedCursor.close();
+        return phNumber;
     }
 
     private void setupSearchRV() {
@@ -150,6 +164,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()>2)
                     contactsAdapter.filter(s.toString());
+                else if(s.length() == 0)
+                    contactsAdapter.setItems(contactList);
                 else
                     contactsAdapter.setItems(contactList);
             }
@@ -191,7 +207,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        setupAdapter();
 
     }
     public ArrayList<ContactModel> getContacts(Cursor cursor) {
@@ -349,12 +364,18 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
                 display("#");
                 break;
             case R.id.dialpad_call_button:
-                boolean dualActive = checkSimAvailability();
-                if (dualActive) {
-                    selectSim();
+                if(screen.getText().length()>2){
+                    boolean dualActive = checkSimAvailability();
+                    if (dualActive) {
+                        selectSim();
+                    }
+                    else
+                        makeCall(-1);
                 }
-                else
-                    makeCall(-1);
+                else {
+                    if(retrieveLastCallSummary() != null)
+                        screen.setText(retrieveLastCallSummary());
+                }
                 break;
             case R.id.btnDel:
                 int pos = screen.getSelectionStart();
@@ -413,22 +434,16 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_select_sim);
 
-        RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.select_sim_radio_group);
+        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
+        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
 
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.sim1_rb)
-                {
-                    makeCall(0);
-                    dialog.dismiss();
-                }
-                else if(checkedId == R.id.sim2_rb)
-                {
-                    makeCall(1);
-                    dialog.dismiss();
-                }
-            }
+        sim1_tv.setOnClickListener(v -> {
+            makeCall(0);
+            dialog.dismiss();
+        });
+        sim2_tv.setOnClickListener(v -> {
+            makeCall(1);
+            dialog.dismiss();
         });
         dialog.show();
 
@@ -436,8 +451,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
     }
 
     private void makeCall(int simNumber) {
-        Intent intent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + screen.getText().toString()));
-        intent.setData(Uri.parse("tel:" + screen.getText().toString()));
+        Intent intent = new Intent("android.intent.action.CALL",Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
+        intent.setData(Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
         intent.putExtra("com.android.phone.force.slot", true);
         intent.putExtra("Cdma_Supp", true);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {

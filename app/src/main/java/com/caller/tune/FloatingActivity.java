@@ -230,19 +230,16 @@ private boolean checkSimAvailability() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_select_sim);
 
-        RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.select_sim_radio_group);
+        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
+        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
 
-        rg.setOnCheckedChangeListener((group, checkedId) -> {
-            if(checkedId == R.id.sim1_rb)
-            {
-                makeCall(0);
-                dialog.dismiss();
-            }
-            else if(checkedId == R.id.sim2_rb)
-            {
-                makeCall(1);
-                dialog.dismiss();
-            }
+        sim1_tv.setOnClickListener(v -> {
+            makeCall(0);
+            dialog.dismiss();
+        });
+        sim2_tv.setOnClickListener(v -> {
+            makeCall(1);
+            dialog.dismiss();
         });
         dialog.show();
 

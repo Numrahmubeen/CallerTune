@@ -1,6 +1,8 @@
 package com.caller.tune;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.TextViewCompat;
 
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
@@ -9,6 +11,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +26,7 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.telecom.Call;
+import android.telecom.CallAudioState;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -30,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,8 +56,8 @@ public class CallActivity extends AppCompatActivity {
 
     private CompositeDisposable disposables = new CompositeDisposable();
     public static String number;
-    private ImageView answer, hangup, caller_iv;
-    private TextView callState_tv, callerName_tv;
+    private ImageView rejectCall_iv, answerCall_iv, caller_iv, hangUp_call_iv;
+    private TextView callState_tv, callerName_tv, speakerOn_tv, holdCall_tv, muteCall_tv;
     private ArrayList<ContactModel> priorityContactsList;
     private MyDbHandler db;
     private boolean isIncomingNumberPriority = false;
@@ -61,8 +66,11 @@ public class CallActivity extends AppCompatActivity {
     private String ringerModeName;
     private AudioManager am;
     private Chronometer chronometer;
-    Ringtone r;
-    boolean isTimerOn = false;
+    private boolean isHold = false;
+    private Ringtone r;
+    private boolean isTimerOn = false;
+    private CardView inCall_cv;
+    private LinearLayout callRinging_ll;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,17 +92,103 @@ public class CallActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
-        answer = findViewById(R.id.answer);
-        hangup = findViewById(R.id.hangup);
-        callState_tv = findViewById(R.id.phone_state_tv);
-        callerName_tv = findViewById(R.id.caller_name_tv);
-        caller_iv = findViewById(R.id.caller_iv);
-        chronometer = findViewById(R.id.chronometer);
-
+        bindView();
+        clickListeners();
         db = new MyDbHandler(CallActivity.this);
         priorityContactsList = db.getAllContacts();
         number = getIntent().getData().getSchemeSpecificPart();
 
+    }
+
+    private void clickListeners() {
+        answerCall_iv.setOnClickListener(v -> OngoingCall.answer());
+
+        rejectCall_iv.setOnClickListener(v -> OngoingCall.hangup());
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setMode(AudioManager.MODE_IN_CALL);
+        muteCall_tv.setOnClickListener(v -> {
+
+            if (audioManager.isMicrophoneMute() == false) {
+                audioManager.setMicrophoneMute(true);
+                TextViewCompat.setCompoundDrawableTintList(muteCall_tv, ColorStateList.valueOf(getResources().getColor(R.color.green)));
+
+            } else
+                {
+                    audioManager.setMicrophoneMute(false);
+                    TextViewCompat.setCompoundDrawableTintList(muteCall_tv, ColorStateList.valueOf(getResources().getColor(R.color.black)));
+
+                }
+
+        });
+
+        speakerOn_tv.setOnClickListener(v -> {
+           toggleSpeaker();
+        });
+        holdCall_tv.setOnClickListener(v -> {
+            if(isHold)
+            {
+                OngoingCall.unHold();
+                isHold = false;
+                TextViewCompat.setCompoundDrawableTintList(holdCall_tv, ColorStateList.valueOf(getResources().getColor(R.color.black)));
+
+            }
+            else
+            {
+                OngoingCall.hold();
+                isHold = true;
+                TextViewCompat.setCompoundDrawableTintList(holdCall_tv, ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            }
+
+        });
+        hangUp_call_iv.setOnClickListener(v -> {
+            OngoingCall.hangup();
+        });
+    }
+
+    public void toggleSpeaker() {
+        AudioManager am = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
+        boolean isSpeakerOn = am.isSpeakerphoneOn();
+        int earpiece = CallAudioState.ROUTE_WIRED_OR_EARPIECE;
+        int speaker = CallAudioState.ROUTE_SPEAKER;
+
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.P){
+            if(isSpeakerOn){
+                CallService.getInstance().setAudioRoute(earpiece);
+                TextViewCompat.setCompoundDrawableTintList(speakerOn_tv, ColorStateList.valueOf(getResources().getColor(R.color.black)));
+            }
+            else {
+                CallService.getInstance().setAudioRoute(speaker);
+                TextViewCompat.setCompoundDrawableTintList(speakerOn_tv, ColorStateList.valueOf(getResources().getColor(R.color.green)));
+
+            }
+
+        } else {
+            if(isSpeakerOn)
+            {
+                am.setSpeakerphoneOn(false);
+                TextViewCompat.setCompoundDrawableTintList(speakerOn_tv, ColorStateList.valueOf(getResources().getColor(R.color.black)));
+            }
+            else {
+                am.setSpeakerphoneOn(true);
+                TextViewCompat.setCompoundDrawableTintList(speakerOn_tv, ColorStateList.valueOf(getResources().getColor(R.color.green)));
+
+            }
+        }
+
+    }
+    private void bindView() {
+        answerCall_iv = findViewById(R.id.answer_call_iv);
+        rejectCall_iv = findViewById(R.id.reject_call_iv);
+        callState_tv = findViewById(R.id.phone_state_tv);
+        callerName_tv = findViewById(R.id.caller_name_tv);
+        caller_iv = findViewById(R.id.caller_iv);
+        chronometer = findViewById(R.id.chronometer);
+        holdCall_tv = findViewById(R.id.hold_call_tv);
+        speakerOn_tv = findViewById(R.id.speaker_on_tv);
+        muteCall_tv = findViewById(R.id.mute_call_tv);
+        hangUp_call_iv = findViewById(R.id.hangUp_call_iv);
+        callRinging_ll = findViewById(R.id.ringing_ll);
+        inCall_cv = findViewById(R.id.inCall_cv);
     }
 
     private void managePriorityContacts() {
@@ -175,9 +269,6 @@ public class CallActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        answer.setOnClickListener(v -> OngoingCall.answer());
-
-        hangup.setOnClickListener(v -> OngoingCall.hangup());
 
         // Subscribe to state change -> call updateUi when change
         new OngoingCall();
@@ -220,12 +311,13 @@ public class CallActivity extends AppCompatActivity {
         if (state == Call.STATE_RINGING)
         {
             managePriorityContacts();
-            answer.setVisibility(View.VISIBLE);
+            callRinging_ll.setVisibility(View.VISIBLE);
+            inCall_cv.setVisibility(View.GONE);
             callState_tv.setText("Incoming Call");
             isTimerOn = false;
         }
-        else{
-            answer.setVisibility(View.GONE);
+        else {
+            callRinging_ll.setVisibility(View.GONE);
             if(r != null){
                 if(r.isPlaying())
                     r.stop();
@@ -234,22 +326,33 @@ public class CallActivity extends AppCompatActivity {
 
         if(state == Call.STATE_DIALING){
             callState_tv.setText("Calling..");
+            inCall_cv.setVisibility(View.VISIBLE);
             isTimerOn = false;
         }
 
         if(state == Call.STATE_ACTIVE){
             callState_tv.setVisibility(View.GONE);
-            chronometer.setBase(SystemClock.elapsedRealtime());
+            inCall_cv.setVisibility(View.VISIBLE);
+            if(!isTimerOn)
+                chronometer.setBase(SystemClock.elapsedRealtime());
             chronometer.start();
             chronometer.setVisibility(View.VISIBLE);
             isTimerOn = true;
         }
 
-        if(state == Call.STATE_DISCONNECTED)
+        if(state == Call.STATE_DISCONNECTED || state == Call.STATE_AUDIO_PROCESSING)
         {
             chronometer.stop();
             if(isTimerOn)
-                Toast.makeText(this, "Call Ended "+ chronometer.getText().toString(), Toast.LENGTH_SHORT).show();
+            {
+                callState_tv.setText(chronometer.getText().toString());
+            }
+            else {
+                callState_tv.setText("0.00 sec");
+            }
+            callState_tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_end_call,0,0,0);
+            callState_tv.setVisibility(View.VISIBLE);
+            chronometer.setVisibility(View.GONE);
 
             if(ringerMode != requiredRingMode)
             {
@@ -262,10 +365,9 @@ public class CallActivity extends AppCompatActivity {
 
         }
 
-        if (state == Call.STATE_DIALING || state == Call.STATE_RINGING || state == Call.STATE_ACTIVE)
-            hangup.setVisibility(View.VISIBLE);
-        else
-            hangup.setVisibility(View.GONE);
+        if (state == Call.STATE_DIALING ||  state == Call.STATE_ACTIVE)
+            inCall_cv.setVisibility(View.VISIBLE);
+
     }
     public static ContactModel retrieveContactInfo(Context context, String number) {
         ContactModel contactModel = new ContactModel();
