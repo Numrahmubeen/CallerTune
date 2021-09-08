@@ -81,45 +81,6 @@ public class PriorityContactsAdapter extends RecyclerView.Adapter {
                 holder.ringMode_iv.setImageResource(R.drawable.call_sound);
 
         }
-        switch (result.getMsgRingMode()){
-            case Params.AM_SILENT_MODE:
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_silent);
-                break;
-            case Params.AM_VIBRATE_MODE:
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_vibration);
-                break;
-            case Params.AM_SKIP_MODE:
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_default);
-                break;
-            default:
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_sound);
-        }
-
-        holder.msg_ringMode_iv.setOnClickListener(v -> {
-            if(result.getMsgRingMode().equals(Params.AM_RING_MODE)){
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_vibration);
-                result.setMsgRingMode(Params.AM_VIBRATE_MODE);
-                db.updateContact(result);
-                Snackbar.make(holder.itemView, "Message Ringtone set to Vibration..", Snackbar.LENGTH_SHORT).show();
-            }
-            else if(result.getMsgRingMode().equals(Params.AM_VIBRATE_MODE)){
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_silent);
-                result.setMsgRingMode(Params.AM_SILENT_MODE);
-                db.updateContact(result);
-                Snackbar.make(holder.itemView, "Message Ringtone set to Silent", Snackbar.LENGTH_SHORT).show();
-            }else if(result.getMsgRingMode().equals(Params.AM_SILENT_MODE)){
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_default);
-                result.setMsgRingMode(Params.AM_SKIP_MODE);
-                db.updateContact(result);
-                Snackbar.make(holder.itemView, "Default Mode. App will skip message for this Number", Snackbar.LENGTH_SHORT).show();
-            }else if(result.getMsgRingMode().equals(Params.AM_SKIP_MODE)){
-                holder.msg_ringMode_iv.setImageResource(R.drawable.msg_sound);
-                result.setMsgRingMode(Params.AM_RING_MODE);
-                db.updateContact(result);
-                Snackbar.make(holder.itemView, "Message Ringtone set to Sound", Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
         holder.ringMode_iv.setOnClickListener(v -> {
             if(result.getCallRingMode().equals(Params.AM_RING_MODE)){
                 holder.ringMode_iv.setImageResource(R.drawable.call_vibration);
@@ -235,7 +196,7 @@ public class PriorityContactsAdapter extends RecyclerView.Adapter {
 
         TextView contactName, contactNumber;
         CircleImageView civ;
-        ImageView ringMode_iv,isCheck_iv, msg_ringMode_iv;
+        ImageView ringMode_iv,isCheck_iv;
 
         RelativeLayout row;
 
@@ -254,8 +215,6 @@ public class PriorityContactsAdapter extends RecyclerView.Adapter {
             contactNumber = itemView.findViewById(R.id.contact_number_tv);
             ringMode_iv = itemView.findViewById(R.id.callRing_iv);
             isCheck_iv = itemView.findViewById(R.id.isCheck_iv);
-            msg_ringMode_iv = itemView.findViewById(R.id.msgRing_iv);
-
         }
 
     }

@@ -50,15 +50,7 @@
             android:text="Contact Number"/>
 
     </LinearLayout>
-    <ImageView
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        android:id="@+id/msgRing_iv"
-        android:text="ring"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/_20sdp"
-        android:src="@drawable/msg_sound"
-        android:layout_toLeftOf="@+id/callRing_iv"/>
+
     <ImageView
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"

@@ -71,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.ACCESS_NOTIFICATION_POLICY,
             Manifest.permission.READ_CALL_LOG,
             Manifest.permission.WRITE_CALL_LOG,
-            Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.SEND_SMS,
             Manifest.permission.MODIFY_AUDIO_SETTINGS
     };
 
@@ -85,11 +83,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         managePermissions();
 
-        if (!Settings.canDrawOverlays(this)) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, 0);
-        }
+//        if (!Settings.canDrawOverlays(this)) {
+//            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+//                    Uri.parse("package:" + getPackageName()));
+//            startActivityForResult(intent, 0);
+//        }
         db = new MyDbHandler(this);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

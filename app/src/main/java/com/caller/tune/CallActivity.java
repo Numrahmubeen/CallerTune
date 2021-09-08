@@ -75,6 +75,14 @@ public class CallActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
         setContentView(R.layout.activity_call);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
@@ -176,6 +184,7 @@ public class CallActivity extends AppCompatActivity {
         }
 
     }
+
     private void bindView() {
         answerCall_iv = findViewById(R.id.answer_call_iv);
         rejectCall_iv = findViewById(R.id.reject_call_iv);
@@ -340,7 +349,7 @@ public class CallActivity extends AppCompatActivity {
             isTimerOn = true;
         }
 
-        if(state == Call.STATE_DISCONNECTED || state == Call.STATE_AUDIO_PROCESSING)
+        if(state == Call.STATE_DISCONNECTED)
         {
             chronometer.stop();
             if(isTimerOn)
