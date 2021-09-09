@@ -7,6 +7,7 @@ import android.content.ContentProviderResult;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -50,6 +51,9 @@ public class Params {
     public static final String AM_VIBRATE_MODE = "vibrate";
     public static final String AM_SILENT_MODE = "silent";
     public static final String AM_SKIP_MODE = "block";
+    public static final String CALL_RESPONSE_ACTION_KEY = "CALL_RESPONSE_ACTION_KEY";
+    public static final String CALL_RECEIVE_ACTION = "CALL_RECEIVE_ACTION";
+    public static final String CALL_CANCEL_ACTION = "CALL_CANCEL_ACTION";
 
     public static long addContact(String name, String number,String type,Context context){
         long contactId ;

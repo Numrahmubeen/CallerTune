@@ -18,5 +18,6 @@
     <color name="green">#FF00FF00</color>
     <color name="receive_call">#FF0000FF</color>
     <color name="gray_call">#807B7B</color>
+    <color name="green_noti_text">#0EB515</color>
 
 </resources>

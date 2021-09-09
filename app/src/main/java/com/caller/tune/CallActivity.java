@@ -2,10 +2,14 @@ package com.caller.tune;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
 import androidx.core.widget.TextViewCompat;
 
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -41,6 +45,7 @@ import android.widget.Toast;
 import com.caller.tune.data.MyDbHandler;
 import com.caller.tune.models.ContactModel;
 import com.caller.tune.params.Params;
+import com.caller.tune.params.Preference;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +55,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+import static com.caller.tune.CallService.r;
 import static com.caller.tune.OngoingCall.state;
 
 public class CallActivity extends AppCompatActivity {
@@ -58,16 +64,8 @@ public class CallActivity extends AppCompatActivity {
     public static String number;
     private ImageView rejectCall_iv, answerCall_iv, caller_iv, hangUp_call_iv;
     private TextView callState_tv, callerName_tv, speakerOn_tv, holdCall_tv, muteCall_tv;
-    private ArrayList<ContactModel> priorityContactsList;
-    private MyDbHandler db;
-    private boolean isIncomingNumberPriority = false;
-    private ContactModel incomingCallContact;
-    private int ringerMode, requiredRingMode;
-    private String ringerModeName;
-    private AudioManager am;
     private Chronometer chronometer;
     private boolean isHold = false;
-    private Ringtone r;
     private boolean isTimerOn = false;
     private CardView inCall_cv;
     private LinearLayout callRinging_ll;
@@ -99,12 +97,21 @@ public class CallActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+        Preference preference = new Preference(this);
 
         bindView();
         clickListeners();
-        db = new MyDbHandler(CallActivity.this);
-        priorityContactsList = db.getAllContacts();
-        number = getIntent().getData().getSchemeSpecificPart();
+
+        Intent i = getIntent();
+        if(i.getData() != null)
+        {
+            number = getIntent().getData().getSchemeSpecificPart();
+            preference.setNumber(number);
+        }
+        else {
+            number = preference.getNumber();
+        }
+
 
     }
 
@@ -149,6 +156,8 @@ public class CallActivity extends AppCompatActivity {
 
         });
         hangUp_call_iv.setOnClickListener(v -> {
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
             OngoingCall.hangup();
         });
     }
@@ -200,79 +209,6 @@ public class CallActivity extends AppCompatActivity {
         inCall_cv = findViewById(R.id.inCall_cv);
     }
 
-    private void managePriorityContacts() {
-        for (ContactModel c:priorityContactsList)
-        {
-            String cNo = c.getMobileNumber().replaceAll("\\p{Z}","");
-            if(PhoneNumberUtils.compare(number, cNo))
-            {
-                isIncomingNumberPriority = true;
-                incomingCallContact = c;
-                break;
-            }
-        }
-        if(incomingCallContact != null) {
-            am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            ringerMode = am.getRingerMode();
-            switch (ringerMode)
-            {
-                case AudioManager.RINGER_MODE_VIBRATE:
-                    ringerModeName = "Vibrate";
-                    break;
-                case AudioManager.RINGER_MODE_SILENT:
-                    ringerModeName = "Silent";
-                    break;
-                case AudioManager.RINGER_MODE_NORMAL:
-                    ringerModeName = "Sound";
-            }
-            requiredRingMode = am.getRingerMode();
-            if (incomingCallContact.getCallRingMode().equals(Params.AM_RING_MODE))
-                setRingingMode();
-            else if (incomingCallContact.getCallRingMode().equals(Params.AM_SILENT_MODE))
-                setSilentMode();
-            else if (incomingCallContact.getCallRingMode().equals(Params.AM_VIBRATE_MODE)){
-                setVibratingMode();
-            }
-            else
-                Toast.makeText(this, "incming call contact ring mode: "+incomingCallContact.getCallRingMode(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setSilentMode() {
-        requiredRingMode = AudioManager.RINGER_MODE_SILENT;
-        if (ringerMode != requiredRingMode) {
-            am.setRingerMode(requiredRingMode);
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            r = RingtoneManager.getRingtone(this, notification);
-            if(r.isPlaying())
-                r.stop();
-            Toast.makeText(this, "Ringer Mode Changed to: Silent" , Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    private void setVibratingMode() {
-        requiredRingMode = AudioManager.RINGER_MODE_VIBRATE;
-        if (ringerMode != requiredRingMode) {
-            am.setRingerMode(requiredRingMode);
-            Uri ring = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            r = RingtoneManager.getRingtone(this, ring);
-            r.play();
-            Toast.makeText(this, "Ringer Mode Changed to: Vibrate", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void setRingingMode() {
-        requiredRingMode = AudioManager.RINGER_MODE_NORMAL;
-        if (ringerMode != requiredRingMode) {
-            am.setRingerMode(requiredRingMode);
-            Uri ring = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            r = RingtoneManager.getRingtone(this, ring);
-            r.play();
-            Toast.makeText(this, "Ringer Mode Changed to: Sound", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @SuppressLint("CheckResult")
     @Override
     public void onStart() {
@@ -319,19 +255,13 @@ public class CallActivity extends AppCompatActivity {
 
         if (state == Call.STATE_RINGING)
         {
-            managePriorityContacts();
             callRinging_ll.setVisibility(View.VISIBLE);
             inCall_cv.setVisibility(View.GONE);
             callState_tv.setText("Incoming Call");
             isTimerOn = false;
-        }
-        else {
+        }else
             callRinging_ll.setVisibility(View.GONE);
-            if(r != null){
-                if(r.isPlaying())
-                    r.stop();
-            }
-        }
+
 
         if(state == Call.STATE_DIALING){
             callState_tv.setText("Calling..");
@@ -362,15 +292,9 @@ public class CallActivity extends AppCompatActivity {
             callState_tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_end_call,0,0,0);
             callState_tv.setVisibility(View.VISIBLE);
             chronometer.setVisibility(View.GONE);
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancelAll();
 
-            if(ringerMode != requiredRingMode)
-            {
-                am.setRingerMode(ringerMode);
-                incomingCallContact = null;
-                if(ringerModeName != null){
-                    Toast.makeText(this, "Ringer Mode Changed to: "+ ringerModeName, Toast.LENGTH_SHORT).show();
-                }
-            }
 
         }
 
@@ -378,6 +302,8 @@ public class CallActivity extends AppCompatActivity {
             inCall_cv.setVisibility(View.VISIBLE);
 
     }
+
+
     public static ContactModel retrieveContactInfo(Context context, String number) {
         ContactModel contactModel = new ContactModel();
         ContentResolver contentResolver = context.getContentResolver();

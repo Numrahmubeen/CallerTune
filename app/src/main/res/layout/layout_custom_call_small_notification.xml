@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_4sdp"
+    android:layout_marginLeft="@dimen/_10sdp"
+    android:layout_marginRight="@dimen/_10sdp">
+    <TextView
+        android:id="@+id/notification_small_title_tv"
+        style="@style/TextAppearance.Compat.Notification.Title"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/green_noti_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ongoing Call" />
+    <TextView
+        android:id="@+id/notification_small_incoming_caller"
+        style="@style/TextAppearance.Compat.Notification.Media"
+        android:layout_below="@+id/notification_small_title_tv"
+        android:textColor="@color/black"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mom Jazz" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notification_small_accept_call_iv"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/circle_bg"
+        android:padding="@dimen/_10sdp"
+        android:backgroundTint="@color/green_noti_text"
+        android:src="@drawable/ic_phone"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notification_small_reject_call_iv"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_toLeftOf="@+id/notification_small_accept_call_iv"
+        android:layout_gravity="right"
+        android:background="@drawable/circle_bg"
+        android:padding="@dimen/_10sdp"
+        android:backgroundTint="#ff0000"
+        android:src="@drawable/ic_end_call_white_"/>
+
+</RelativeLayout>
