@@ -46,6 +46,8 @@ import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static androidx.core.app.NotificationCompat.*;
 import static com.caller.tune.OngoingCall.state;
 
@@ -68,6 +70,7 @@ public class CallService extends InCallService {
     private final String ACCEPT_CALL ="ACCEPT_CALL" , REJECT_CALL = "REJECT_CALL";
     private Call myCall;
     private Preference preference;
+    private RemoteViews smallNotificationLayout,notificationLayout;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -142,11 +145,13 @@ public class CallService extends InCallService {
         if(state == Call.STATE_DIALING){
             callDirection =  "  Outgoing Call";
         }
-        if(state == Call.STATE_ACTIVE)
+        if(state == Call.STATE_ACTIVE || state == Call.STATE_DIALING)
         {
 //            notificationBuilder.mActions.remove(0);
-//            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//            mNotificationManager.notify(NOTIF_ID, notificationBuilder.build());
+            notificationLayout.setViewVisibility(R.id.notification_answer_call_tv,GONE);
+            smallNotificationLayout.setViewVisibility(R.id.notification_small_accept_call_iv,GONE);
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(NOTIF_ID, notificationBuilder.build());
 
         }
         if(state == Call.STATE_DISCONNECTED || state == Call.STATE_DISCONNECTING)
@@ -269,13 +274,13 @@ public class CallService extends InCallService {
         PendingIntent notifyPendingIntent = PendingIntent.getActivity(
                 this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
         );
-        RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.layout_custom_call_notification);
+        notificationLayout = new RemoteViews(getPackageName(), R.layout.layout_custom_call_notification);
         notificationLayout.setTextViewText(R.id.notification_title_tv,callTyp);
         notificationLayout.setTextViewText(R.id.notification_incoming_caller,callerName);
         notificationLayout.setOnClickPendingIntent(R.id.notification_answer_call_tv,pendingAnswerIntent);
         notificationLayout.setOnClickPendingIntent(R.id.notification_reject_call_tv,pendingRejectIntent);
 
-        RemoteViews smallNotificationLayout = new RemoteViews(getPackageName(), R.layout.layout_custom_call_small_notification);
+        smallNotificationLayout = new RemoteViews(getPackageName(), R.layout.layout_custom_call_small_notification);
         smallNotificationLayout.setTextViewText(R.id.notification_small_title_tv,callTyp);
         smallNotificationLayout.setTextViewText(R.id.notification_small_incoming_caller,callerName);
         smallNotificationLayout.setOnClickPendingIntent(R.id.notification_small_accept_call_iv,pendingAnswerIntent);

@@ -29,8 +29,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/notification_small_reject_call_iv"
         android:id="@+id/notification_small_accept_call_iv"
-        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/_10sdp"
         android:background="@drawable/circle_bg"
         android:padding="@dimen/_10sdp"
         android:backgroundTint="@color/green_noti_text"
@@ -38,9 +39,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:id="@+id/notification_small_reject_call_iv"
-        android:layout_marginRight="@dimen/_10sdp"
-        android:layout_toLeftOf="@+id/notification_small_accept_call_iv"
         android:layout_gravity="right"
         android:background="@drawable/circle_bg"
         android:padding="@dimen/_10sdp"
