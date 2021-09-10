@@ -93,6 +93,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
     private ImageView showDialPad_iv;
     private RelativeLayout btn0_rl;
     private static final int CONTACT_LOADER = 0;
+    //Todo uncomment the code after searchview appear in activity
   //  private EditText searchView;
 
     public PhoneFragment() {
@@ -175,6 +176,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
 
             }
         });
+        //TODO uncomment the code after searchview appear in activity
 //        searchView.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -407,13 +409,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
         // cursor_call_logs.getColumnIndexOrThrow("subscription_id")
         final SubscriptionManager subscriptionManager = SubscriptionManager.from(getContext().getApplicationContext());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return false;
         }
         final List<SubscriptionInfo> activeSubscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
