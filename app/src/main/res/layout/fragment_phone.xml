@@ -1,86 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl"
-    android:layout_height="match_parent">
-<!--    Todo searchView-->
-<!--        <EditText-->
-<!--            android:id="@+id/searchView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Search Contacts Here"-->
-<!--            android:layout_alignParentTop="true"/>-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--    Todo searchView -->
+    <EditText
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:hint="Search Contacts Here" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragPhone_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:layout_above="@id/dialPad_cl"
+        tools:listitem="@layout/item_contacts_rv" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialPad_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#fff"
+        android:paddingTop="2dp">
+
+        <EditText
+            android:id="@+id/screen"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/fragPhone_rv"
-            android:layout_alignParentTop="true"
-            android:layout_alignTop="@id/dialPad_cl"
-            tools:listitem="@layout/item_contacts_rv"/>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:id="@+id/dialPad_cl"
-            android:layout_alignParentBottom="true"
-            android:paddingTop="2dp">
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:gravity="center"
+            android:textSize="@dimen/dialpad_text_size"
+            app:layout_constraintBottom_toTopOf="@+id/dialpad_wrapper"
+            app:layout_constraintEnd_toStartOf="@+id/btnDel"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/screen"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_margin"
-                android:gravity="center"
-                android:textSize="@dimen/dialpad_text_size"
-                app:layout_constraintBottom_toTopOf="@+id/dialpad_wrapper"
-                app:layout_constraintEnd_toStartOf="@+id/btnDel"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <ImageView
-                android:id="@+id/btnDel"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginRight="@dimen/activity_margin"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:paddingStart="@dimen/activity_margin"
-                android:paddingEnd="@dimen/activity_margin"
-                android:src="@drawable/ic_cross"
-                app:layout_constraintBottom_toBottomOf="@+id/screen"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/screen" />
-
-            <include
-                android:id="@+id/dialpad_wrapper"
-                layout="@layout/dialpad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/dialpad_call_button" />
-            <ImageView
-                android:id="@+id/dialpad_call_button"
-                android:layout_width="@dimen/dialpad_button_size"
-                android:layout_height="@dimen/dialpad_button_size"
-                android:layout_marginBottom="@dimen/activity_margin"
-                android:background="@drawable/circle_bg"
-                android:elevation="@dimen/medium_margin"
-                android:padding="10dp"
-                android:src="@drawable/ic_phone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
         <ImageView
-            android:id="@+id/showDialPad_iv"
+            android:id="@+id/btnDel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginRight="@dimen/activity_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingStart="@dimen/activity_margin"
+            android:paddingEnd="@dimen/activity_margin"
+            android:src="@drawable/ic_cross"
+            app:layout_constraintBottom_toBottomOf="@+id/screen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/screen" />
+
+        <include
+            android:id="@+id/dialpad_wrapper"
+            layout="@layout/dialpad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/dialpad_call_button" />
+
+        <ImageView
+            android:id="@+id/dialpad_call_button"
             android:layout_width="@dimen/dialpad_button_size"
             android:layout_height="@dimen/dialpad_button_size"
-            android:visibility="gone"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/activity_margin"
             android:background="@drawable/circle_bg"
+            android:elevation="@dimen/medium_margin"
             android:padding="10dp"
-            android:src="@drawable/ic_dialpad"/>
+            android:src="@drawable/ic_phone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/showDialPad_iv"
+        android:layout_width="@dimen/dialpad_button_size"
+        android:layout_height="@dimen/dialpad_button_size"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:background="@drawable/circle_bg"
+        android:padding="10dp"
+        android:src="@drawable/ic_dialpad"
+        android:visibility="gone" />
 </RelativeLayout>
 

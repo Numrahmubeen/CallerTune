@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -113,12 +114,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //inflating tab layout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         //displaying tabs
-        new TabLayoutMediator(tabLayout, viewPager,(tab, position) ->tab.setText(titles[position])).attach();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(titles[position])).attach();
         requestMutePermissions();
         if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.READ_PHONE_STATE)!= PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]
-                    {Manifest.permission.READ_PHONE_STATE},3);
+                    {Manifest.permission.READ_PHONE_STATE}, 3);
         }
 
     }
@@ -136,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     private boolean hasPermissions(String[] permissions) {
         if (permissions != null) {
             for (String permission : permissions) {
@@ -149,13 +149,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    void refreshFragments()
-    {
+    void refreshFragments() {
         viewPager.setAdapter(null);
         pagerAdapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
-        new TabLayoutMediator(tabLayout, viewPager,(tab, position) ->tab.setText(titles[position])).attach();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(titles[position])).attach();
     }
+
     private void requestMutePermissions() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted()) {
@@ -170,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    public void showAddNumberDialog(Context context)
-    {
+
+    public void showAddNumberDialog(Context context) {
         Dialog dialog = new Dialog(context);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_add_number);
@@ -192,43 +192,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         add_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nameEt.getText().length()>0 && numberEt.getText().length()>0)
-                {
+                if (nameEt.getText().length() > 0 && numberEt.getText().length() > 0) {
                     MyDbHandler db = new MyDbHandler(context);
 
                     ContactModel contact = new ContactModel();
-                    contact.setId(numberEt.getText().toString()+System.currentTimeMillis());
+                    contact.setId(numberEt.getText().toString() + System.currentTimeMillis());
                     contact.setName(nameEt.getText().toString());
                     contact.setMobileNumber(numberEt.getText().toString());
                     contact.setPhotoUri(null);
                     contact.setCallRingMode(Params.AM_RING_MODE);
                     contact.setMsgRingMode(Params.AM_RING_MODE);
 
-                    if(shouldAddToContacts.isChecked()){
+                    if (shouldAddToContacts.isChecked()) {
                         if (ContextCompat.checkSelfPermission(context, WRITE_CONTACTS) != PERMISSION_GRANTED) {
                             if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, WRITE_CONTACTS)) {
                                 ActivityCompat.requestPermissions((Activity) context, new String[]{WRITE_CONTACTS}, 11);
                             } else {
                                 ActivityCompat.requestPermissions((Activity) context, new String[]{WRITE_CONTACTS}, 11);
                             }
-                        }
-                        else {
-                            long cId = Params.addContact(nameEt.getText().toString(),numberEt.getText().toString(),spinner.getSelectedItem().toString(),context);
+                        } else {
+                            long cId = Params.addContact(nameEt.getText().toString(), numberEt.getText().toString(), spinner.getSelectedItem().toString(), context);
                             contact.setId(String.valueOf(cId));
                             db.addContact(contact);
                             Toast.makeText(context, "New Contact Successfully Saved!", Toast.LENGTH_SHORT).show();
 
                         }
-                    }
-                    else {
+                    } else {
                         db.addContact(contact);
                         Toast.makeText(context, "Contact Successfully Saved as Priority Contact!", Toast.LENGTH_SHORT).show();
 
                     }
                     refreshFragments();
                     dialog.dismiss();
-                }
-                else {
+                } else {
                     Toast.makeText(context, "Please Enter complete details.", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
@@ -239,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         dialog.show();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -249,15 +246,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }else if (id == R.id.action_add_contact_manually) {
+        } else if (id == R.id.action_add_contact_manually) {
             showAddNumberDialog(this);
 
-        }else if (id == R.id.ring_all) {
+        } else if (id == R.id.ring_all) {
             ArrayList<ContactModel> contacts = db.getAllContacts();
-            if(contacts.size()>0)
-            {
-                for (ContactModel c:contacts)
-                {
+            if (contacts.size() > 0) {
+                for (ContactModel c : contacts) {
                     c.setCallRingMode(Params.AM_RING_MODE);
                     db.updateContact(c);
                 }
@@ -265,12 +260,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 refreshFragments();
             }
 
-        }else if (id == R.id.vibrate_all) {
+        } else if (id == R.id.vibrate_all) {
             ArrayList<ContactModel> contacts = db.getAllContacts();
-            if(contacts.size()>0)
-            {
-                for (ContactModel c:contacts)
-                {
+            if (contacts.size() > 0) {
+                for (ContactModel c : contacts) {
                     c.setCallRingMode(Params.AM_VIBRATE_MODE);
                     db.updateContact(c);
                 }
@@ -278,12 +271,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 refreshFragments();
             }
 
-        }else if (id == R.id.mute_all) {
+        } else if (id == R.id.mute_all) {
             ArrayList<ContactModel> contacts = db.getAllContacts();
-            if(contacts.size()>0)
-            {
-                for (ContactModel c:contacts)
-                {
+            if (contacts.size() > 0) {
+                for (ContactModel c : contacts) {
                     c.setCallRingMode(Params.AM_SILENT_MODE);
                     db.updateContact(c);
                 }
@@ -313,17 +304,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_rate_us) {
 
-        }else if (id == R.id.nav_info) {
-            Intent intent = new Intent(MainActivity.this,AboutUsActivity.class);
+        } else if (id == R.id.nav_info) {
+            Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
             startActivity(intent);
 
-        }else if (id == R.id.nav_invite_friends) {
+        } else if (id == R.id.nav_invite_friends) {
 
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onBackPressed() {
         if (viewPager.getCurrentItem() == 0) {
