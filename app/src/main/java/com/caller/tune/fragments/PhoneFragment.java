@@ -23,11 +23,15 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +54,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -64,6 +69,7 @@ import com.caller.tune.R;
 import com.caller.tune.adapter.ContactsAdapter;
 import com.caller.tune.adapter.PhoneContactsAdapter;
 import com.caller.tune.models.ContactModel;
+import com.caller.tune.viewModels.ContactViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.InputStream;
@@ -71,6 +77,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
 
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.READ_CONTACTS;
@@ -81,7 +88,7 @@ import static android.telecom.TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE
 import static androidx.core.content.ContextCompat.getSystemService;
 import static androidx.core.content.PermissionChecker.checkSelfPermission;
 
-public class PhoneFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class PhoneFragment extends Fragment implements View.OnClickListener {
 
     private EditText screen;
     private static final int MY_PERMISSIONS_REQUEST = 1;
@@ -92,12 +99,10 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
     private ConstraintLayout dialPad_cl;
     private ImageView showDialPad_iv;
     private RelativeLayout btn0_rl;
-    private static final int CONTACT_LOADER = 0;
-    //Todo uncomment the code after searchview appear in activity
-  //  private EditText searchView;
+    private ContactViewModel contactViewModel;
+    private EditText searchView_et;
 
     public PhoneFragment() {
-
     }
 
     @Override
@@ -121,6 +126,10 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
         showDialPad_iv.setOnClickListener(v -> {
             dialPad_cl.setVisibility(View.VISIBLE);
             showDialPad_iv.setVisibility(View.GONE);
+            searchView_et.setText(null);
+            InputMethodManager imm = (InputMethodManager) view.getContext()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         });
 
 
@@ -143,7 +152,14 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
         ActivityResultLauncher<String> requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
-                        getActivity().getLoaderManager().initLoader(CONTACT_LOADER, null, this);
+                        contactViewModel.getContacts().observe(getViewLifecycleOwner(), new Observer<ArrayList<ContactModel>>() {
+                            @Override
+                            public void onChanged(ArrayList<ContactModel> contactModels) {
+                                contactList = contactModels;
+                                contactsAdapter.setItems(contactList);
+                                contactsAdapter.notifyDataSetChanged();
+                            }
+                        });
                     } else {
                         Toast.makeText(getContext(), "Permission is required to Select from contacts", Toast.LENGTH_SHORT).show();
                     }
@@ -153,7 +169,12 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
             requestPermissionLauncher.launch(READ_CONTACTS);
         }
         else {
-            getActivity().getLoaderManager().initLoader(CONTACT_LOADER, null, this);
+            contactViewModel.getContacts().observe(getViewLifecycleOwner(), contactModels -> {
+                contactList = contactModels;
+//                Collections.sort(contactList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+                contactsAdapter.setItems(contactList);
+                contactsAdapter.notifyDataSetChanged();
+            });
         }
         screen.addTextChangedListener(new TextWatcher() {
             @Override
@@ -163,10 +184,29 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                contactsAdapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        searchView_et.setOnTouchListener((v, event) -> {
+            dialPad_cl.setVisibility(View.GONE);
+            screen.setText(null);
+            showDialPad_iv.setVisibility(View.VISIBLE);
+            return false;
+        });
+        searchView_et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()>2)
                     contactsAdapter.filter(s.toString());
-                else if(s.length() == 0)
-                    contactsAdapter.setItems(contactList);
                 else
                     contactsAdapter.setItems(contactList);
             }
@@ -176,26 +216,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
 
             }
         });
-        //TODO uncomment the code after searchview appear in activity
-//        searchView.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if(s.length()>2)
-//                    contactsAdapter.filter(s.toString());
-//                else
-//                    contactsAdapter.setItems(contactList);
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -211,58 +231,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
         });
 
     }
-    public ArrayList<ContactModel> getContacts(Cursor cursor) {
-        ArrayList<ContactModel> list = new ArrayList<>();
-        if (cursor.getCount() > 0) {
 
-
-            while (cursor.moveToNext()) {
-                ContactModel info = new ContactModel();
-                info.setId(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
-                info.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                info.setMobileNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                String imageUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media
-                            .getBitmap(getContext().getContentResolver(),
-                                    Uri.parse(imageUri));
-
-                } catch (Exception e) {
-                }
-                info.setPhoto(bitmap);
-                list.add(info);
-//
-//                if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-//                    Cursor cursorInfo = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-//                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
-//                    InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
-//                            ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id)));
-//
-//                    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id));
-//                    Uri pURI = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.PHOTO);
-//
-//                    Bitmap photo = null;
-//                    if (inputStream != null) {
-//                        photo = BitmapFactory.decodeStream(inputStream);
-//                    }
-//                    while (cursorInfo.moveToNext()) {
-//                        ContactModel info = new ContactModel();
-//                        info.setId(id);
-//                        info.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-//                        info.setMobileNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-//                        info.setPhoto(photo);
-//                        info.setPhotoUri(pURI.toString());
-//                        list.add(info);
-//                    }
-//
-            }
-            cursor.close();
-        }
-        return list;
-    }
     private void setupAdapter() {
-        Collections.sort(contactList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         contactsAdapter = new PhoneContactsAdapter(getContext(), item -> {
@@ -291,12 +261,10 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
 
     private void initializeView(View view) {
         screen = view.findViewById(R.id.screen);
-//        searchView = view.findViewById(R.id.searchView);
+        searchView_et = view.findViewById(R.id.searchView);
         recyclerView = view.findViewById(R.id.fragPhone_rv);
         dialPad_cl = view.findViewById(R.id.dialPad_cl);
         showDialPad_iv = view.findViewById(R.id.showDialPad_iv);
-//        screen.setCursorVisible(true);
-//        screen.setTextIsSelectable(true);
         screen.setShowSoftInputOnFocus(false);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         dialpad_call_iv = view.findViewById(R.id.dialpad_call_button);
@@ -313,13 +281,11 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
         }
         btn0_rl = view.findViewById(R.id.btn0);
 
-        btn0_rl.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                display("+");
-                return true;
-            }
+        btn0_rl.setOnLongClickListener(v -> {
+            display("+");
+            return true;
         });
+        contactViewModel = new ContactViewModel(getActivity().getApplication());
     }
 
     public void display(String val) {
@@ -468,28 +434,5 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Loa
             }
             startActivity(intent);
         }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri CONTACT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        return new CursorLoader(getContext(), CONTACT_URI, null, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        try {
-            contactList = getContacts(data);
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "ERROR: " +e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-        Collections.sort(contactList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
-        contactsAdapter.setItems(contactList);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 }

@@ -50,6 +50,7 @@ import com.caller.tune.adapter.PriorityContactsAdapter;
 import com.caller.tune.data.MyDbHandler;
 import com.caller.tune.models.ContactModel;
 import com.caller.tune.params.Params;
+import com.caller.tune.viewModels.ContactViewModel;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -65,9 +66,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class ChooseContactsActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class ChooseContactsActivity extends AppCompatActivity{
 
-    private static final int MY_PERMISSIONS_REQUEST =11 ;
     private ContactsAdapter contactsAdapter;
     private RecyclerView recyclerView;
     public static ProgressBar progressBar;
@@ -75,8 +75,8 @@ public class ChooseContactsActivity extends AppCompatActivity implements LoaderC
     private Button done_bt;
     private TextView noContacts_tv;
     private Toolbar toolbar;
-    // Identifies a particular Loader being used in this component
-    private static final int CONTACT_LOADER = 0;
+    private ContactViewModel contactViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +94,12 @@ public class ChooseContactsActivity extends AppCompatActivity implements LoaderC
         recyclerView.setHasFixedSize(true);
         contactsAdapter = new ContactsAdapter(this);
         recyclerView.setAdapter(contactsAdapter);
+        contactViewModel = new ContactViewModel(getApplication());
 
         ActivityResultLauncher<String> requestPermissionLauncher =
         registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
             if (isGranted) {
-                    getLoaderManager().initLoader(CONTACT_LOADER, null, ChooseContactsActivity.this);
+                getContacts();
             } else {
                 Toast.makeText(this, "Permission is required to Select from contacts", Toast.LENGTH_SHORT).show();
             }
@@ -108,7 +109,7 @@ public class ChooseContactsActivity extends AppCompatActivity implements LoaderC
             requestPermissionLauncher.launch(READ_CONTACTS);
         }
         else{
-            getLoaderManager().initLoader(CONTACT_LOADER, null, this);
+            getContacts();
         }
         clickEvents();
 
@@ -198,7 +199,8 @@ public class ChooseContactsActivity extends AppCompatActivity implements LoaderC
             @Override
             public boolean onQueryTextChange(String newText) {
                 contactsAdapter.filter(newText);
-                return true;            }
+                return true;
+            }
         });
 
         return true;
@@ -246,86 +248,13 @@ public class ChooseContactsActivity extends AppCompatActivity implements LoaderC
 
     }
 
-    public ArrayList<ContactModel> getContacts(Cursor cursor) {
-        ArrayList<ContactModel> list = new ArrayList<>();
-        if (cursor.getCount() > 0) {
-
-
-            while (cursor.moveToNext()) {
-                ContactModel info = new ContactModel();
-                info.setId(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
-                info.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                info.setMobileNumber(cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                String imageUri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media
-                            .getBitmap(this.getContentResolver(),
-                                    Uri.parse(imageUri));
-
-                } catch (Exception e) {
-                }
-                info.setPhoto(bitmap);
-                list.add(info);
-//
-//                if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-//                    Cursor cursorInfo = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-//                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
-//                    InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
-//                            ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id)));
-//
-//                    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id));
-//                    Uri pURI = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.PHOTO);
-//
-//                    Bitmap photo = null;
-//                    if (inputStream != null) {
-//                        photo = BitmapFactory.decodeStream(inputStream);
-//                    }
-//                    while (cursorInfo.moveToNext()) {
-//                        ContactModel info = new ContactModel();
-//                        info.setId(id);
-//                        info.setName(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-//                        info.setMobileNumber(cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-//                        info.setPhoto(photo);
-//                        info.setPhotoUri(pURI.toString());
-//                        list.add(info);
-//                    }
-//
-            }
-            cursor.close();
-        }
-        return list;
-    }
-
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri CONTACT_URI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-        return new CursorLoader(this, CONTACT_URI, null, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        try {
-            contactList = getContacts(data);
-        } catch (Exception e) {
-            Toast.makeText(this, "ERROR: " +e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-        if (contactList.size() == 0) {
-            noContacts_tv.setVisibility(View.VISIBLE);
-        }
-        else {
-            Collections.sort(contactList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+    public void getContacts() {
+        contactViewModel.getContacts().observe(this, contactModels -> {
+            contactList = contactModels;
+//            Collections.sort(contactList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
             contactsAdapter.setItems(contactList);
-        }
-
-        progressBar.setVisibility(View.GONE);
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
+            contactsAdapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+        });
     }
 }

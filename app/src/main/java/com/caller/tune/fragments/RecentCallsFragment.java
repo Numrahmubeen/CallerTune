@@ -29,11 +29,13 @@ import android.widget.Toast;
 import com.caller.tune.R;
 import com.caller.tune.adapter.RecentCallsAdapter;
 import com.caller.tune.models.RecentCall;
+import com.caller.tune.viewModels.CallLogViewModel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,11 +47,10 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
 import static android.Manifest.permission.READ_CALL_LOG;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class RecentCallsFragment extends Fragment implements LoaderCallbacks<Cursor> {
+public class RecentCallsFragment extends Fragment {
     private RecyclerView recentCalls_rv;
     public static ArrayList<RecentCall> recentCalls = new ArrayList<>();
-    private String str_number, str_contact_name, str_call_type, str_call_full_date,
-            str_call_date, str_call_time, str_call_time_formatted, str_call_duration;
+    private CallLogViewModel callLogViewModel;
 
     private SectionedRecyclerViewAdapter sectionedAdapter;
 
@@ -75,23 +76,22 @@ public class RecentCallsFragment extends Fragment implements LoaderCallbacks<Cur
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recent_calls, container, false);
         recentCalls_rv = view.findViewById(R.id.recent_calls_rv);
+        callLogViewModel = new CallLogViewModel(getActivity().getApplication());
         init();
         ActivityResultLauncher<String> requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
 //                        getRecentCalls();
-                        getActivity().getLoaderManager().initLoader(12, null, this);
+                        getRecentCalls();
 
                     } else {
                         Toast.makeText(getContext(), "Permission is required.", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
         if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(READ_CALL_LOG);
         } else {
-            getActivity().getLoaderManager().initLoader(12, null, this);
+            getRecentCalls();
         }
 
         return view;
@@ -171,104 +171,13 @@ public class RecentCallsFragment extends Fragment implements LoaderCallbacks<Cur
 //        }
 //    }
 
-    public void getRecentCalls(Cursor cursor){
-        // reading all data in descending order according to DATE
-
-
-        //clearing the arraylist
-        recentCalls.clear();
-
-        //looping through the cursor to add data into arraylist
-        while (cursor.moveToNext()){
-            str_number = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
-            str_contact_name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
-       //     str_contact_name = str_contact_name==null || str_contact_name.equals("") ? "Unknown" : str_contact_name;
-            str_call_type = cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE));
-            str_call_full_date = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
-            str_call_duration = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DURATION));
-
-            SimpleDateFormat dateFormatter = new SimpleDateFormat(
-                    "dd MMM yyyy");
-            str_call_date = dateFormatter.format(new Date(Long.parseLong(str_call_full_date)));
-
-            SimpleDateFormat timeFormatter = new SimpleDateFormat(
-                    "HH:mm:ss");
-            str_call_time = timeFormatter.format(new Date(Long.parseLong(str_call_full_date)));
-            str_call_time_formatted = getFormattedDateTime(str_call_time,"HH:mm:ss","hh:mm a");
-
-            //str_call_time = getFormatedDateTime(str_call_time, "HH:mm:ss", "hh:mm ss");
-
-            str_call_duration = DurationFormat(str_call_duration);
-
-            switch(Integer.parseInt(str_call_type)){
-                case CallLog.Calls.INCOMING_TYPE:
-                    str_call_type = "Incoming";
-                    break;
-                case CallLog.Calls.OUTGOING_TYPE:
-                    str_call_type = "Outgoing";
-                    break;
-                case CallLog.Calls.MISSED_TYPE:
-                    str_call_type = "Missed";
-                    break;
-                case CallLog.Calls.VOICEMAIL_TYPE:
-                    str_call_type = "Voicemail";
-                    break;
-                case CallLog.Calls.REJECTED_TYPE:
-                    str_call_type = "Rejected";
-                    break;
-                case CallLog.Calls.BLOCKED_TYPE:
-                    str_call_type = "Blocked";
-                    break;
-                case CallLog.Calls.ANSWERED_EXTERNALLY_TYPE:
-                    str_call_type = "Externally Answered";
-                    break;
-                default:
-                    str_call_type = "NA";
-            }
-            String carrierId = cursor.getString(cursor.getColumnIndex(CallLog.Calls.PHONE_ACCOUNT_ID));
-            String photoPath = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_PHOTO_URI));
-            RecentCall callLogItem = new RecentCall(str_number, str_contact_name, str_call_type,
-                    str_call_date, str_call_time_formatted, str_call_duration,carrierId,photoPath);
-
-            recentCalls.add(callLogItem);
-        }
-        cursor.close();
-        setupAdapter();
+    public void getRecentCalls(){
+        callLogViewModel.getRecentCalls().observe(getActivity(),myRecentCalls ->{
+            recentCalls = myRecentCalls;
+            setupAdapter();
+        });
     }
 
-
-    private String getFormattedDateTime(String dateStr, String strInputFormat, String strOutputFormat) {
-        String formattedDate = dateStr;
-        DateFormat inputFormat = new SimpleDateFormat(strInputFormat, Locale.getDefault());
-        DateFormat outputFormat = new SimpleDateFormat(strOutputFormat, Locale.getDefault());
-        Date date = null;
-        try {
-            date = inputFormat.parse(dateStr);
-        } catch (ParseException e) {
-        }
-
-        if (date != null) {
-            formattedDate = outputFormat.format(date);
-        }
-        return formattedDate;
-    }
-    private String DurationFormat(String duration) {
-        String durationFormatted=null;
-        if(Integer.parseInt(duration) < 60){
-            durationFormatted = duration+" sec";
-        }
-        else{
-            int min = Integer.parseInt(duration)/60;
-            int sec = Integer.parseInt(duration)%60;
-
-            if(sec==0)
-                durationFormatted = min + " min" ;
-            else
-                durationFormatted = min + " min " + sec + " sec";
-
-        }
-        return durationFormatted;
-    }
     private String queryPhone(String number) {
         String name = null;
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
@@ -281,19 +190,4 @@ public class RecentCallsFragment extends Fragment implements LoaderCallbacks<Cur
         return name;
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri CONTACT_URI = CallLog.Calls.CONTENT_URI;
-
-        return new CursorLoader(getContext(),CONTACT_URI,null,null,null,android.provider.CallLog.Calls.DATE + " DESC");   }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        getRecentCalls(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
 }

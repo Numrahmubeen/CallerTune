@@ -165,6 +165,10 @@ public class CallService extends InCallService {
                     Toast.makeText(this, "Ringer Mode Changed to: "+ preference.getRingerModeName(), Toast.LENGTH_SHORT).show();
                 }
             }
+            preference.setRequiredRingMode(1111);
+            preference.setRingMode(1111);
+            preference.setRingerModeName("empty");
+
             stopForeground(true);
         }
     }

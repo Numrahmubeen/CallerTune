@@ -35,7 +35,6 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
     public void setItems(ArrayList<ContactModel> items) {
         if (items != null) {
             contactsList = items;
-            listSearch =new ArrayList<>();
             listSearch.addAll(items);
             notifyDataSetChanged();
         }
@@ -81,9 +80,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
         } else{
             text = text.toLowerCase();
             for(ContactModel item: listSearch){
-                String str = item.getMobileNumber().replaceAll("\\s", "");
-                str = str.replaceAll("-","");
-                if(str.contains(text)){
+                if(item.getName().toLowerCase().replaceAll("\\p{Z}","").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\p{Z}","").contains(text)){
                     contactsList.add(item);
                 }
             }
