@@ -41,7 +41,7 @@ public class ContactViewModel extends AndroidViewModel {
 
 
     public MutableLiveData<ArrayList<ContactModel>> getContacts() {
-        contacts.setValue(repository.fetchContacts());
+        contacts = repository.fetchContacts();
         return contacts;
     }
 

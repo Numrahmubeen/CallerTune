@@ -28,7 +28,7 @@ public class CallLogViewModel extends AndroidViewModel {
 
 
     public MutableLiveData<ArrayList<RecentCall>> getRecentCalls() {
-        recentCalls.setValue(repository.fetchCallLogs());
+        recentCalls = repository.fetchCallLogs();
         return recentCalls;
     }
 

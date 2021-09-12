@@ -2,8 +2,10 @@ package com.caller.tune.fragments;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -18,12 +20,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.caller.tune.R;
@@ -53,6 +57,7 @@ public class RecentCallsFragment extends Fragment {
     private CallLogViewModel callLogViewModel;
 
     private SectionedRecyclerViewAdapter sectionedAdapter;
+    private ProgressBar progressBar;
 
 
     public RecentCallsFragment() {
@@ -76,8 +81,8 @@ public class RecentCallsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recent_calls, container, false);
         recentCalls_rv = view.findViewById(R.id.recent_calls_rv);
+        progressBar = view.findViewById(R.id.recent_calls_pb);
         callLogViewModel = new CallLogViewModel(getActivity().getApplication());
-        init();
         ActivityResultLauncher<String> requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
@@ -88,12 +93,25 @@ public class RecentCallsFragment extends Fragment {
                         Toast.makeText(getContext(), "Permission is required.", Toast.LENGTH_SHORT).show();
                     }
                 });
+        ContentObserver contentObserver = new ContentObserver(new Handler()) {
+            @Override
+            public void onChange(boolean selfChange) {
+                // if there're any changes then perform the request and update the UI
+                if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
+                    requestPermissionLauncher.launch(READ_CALL_LOG);
+                } else {
+                    getRecentCalls();
+                }
+            }
+        };
+        getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,true,contentObserver);
+        init();
+
         if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(READ_CALL_LOG);
         } else {
             getRecentCalls();
         }
-
         return view;
     }
 
@@ -173,8 +191,11 @@ public class RecentCallsFragment extends Fragment {
 
     public void getRecentCalls(){
         callLogViewModel.getRecentCalls().observe(getActivity(),myRecentCalls ->{
-            recentCalls = myRecentCalls;
-            setupAdapter();
+            if(myRecentCalls != null){
+                recentCalls = myRecentCalls;
+                setupAdapter();
+                progressBar.setVisibility(View.GONE);
+            }
         });
     }
 

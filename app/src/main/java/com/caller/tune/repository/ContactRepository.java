@@ -9,7 +9,10 @@ import android.os.Looper;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.caller.tune.models.ContactModel;
+import com.caller.tune.models.RecentCall;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +22,18 @@ import java.util.concurrent.Executors;
 public class ContactRepository {
 
     private Context context;
+    private  MutableLiveData<ArrayList<ContactModel>> contactsList;
 
     public ContactRepository(Context context) {
         this.context = context;
+        contactsList = new MutableLiveData<>();
     }
 
-    public ArrayList<ContactModel> fetchContacts() {
+    public MutableLiveData<ArrayList<ContactModel>> fetchContacts() {
+
+        ExecutorService service =  Executors.newSingleThreadExecutor();
+        service.submit(() -> {
+
         ArrayList<ContactModel> contacts = new ArrayList<>();
 
         Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " COLLATE NOCASE ASC");
@@ -51,6 +60,12 @@ public class ContactRepository {
         if (cursor != null) {
             cursor.close();
         }
-        return contacts;
+        // now that you have the fresh user data in freshUserList,
+            // make it available to outside observers of the "users"
+            // MutableLiveData object
+            contactsList.postValue(contacts);
+        });
+
+        return contactsList;
     }
 }
