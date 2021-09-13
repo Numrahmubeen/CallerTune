@@ -84,7 +84,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
         if(text.isEmpty()){
             contactsList.addAll(listSearch);
         } else{
-            text = text.toLowerCase();
+            text = text.toLowerCase().replaceAll("\\s", "");
             for(ContactModel item: listSearch){
                 if(item.getName().toLowerCase().replaceAll("\\s", "").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\s", "").contains(text)){
                     contactsList.add(item);
