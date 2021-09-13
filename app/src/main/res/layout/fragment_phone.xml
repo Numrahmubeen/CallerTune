@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <EditText
         android:id="@+id/searchView"
         android:padding="@dimen/_10sdp"
+        android:singleLine="true"
         android:background="@drawable/et_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -78,6 +78,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.READ_CONTACTS;
@@ -151,8 +153,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
                         contactViewModel.getContacts().observe(getViewLifecycleOwner(), contactModels -> {
-                            contactList = contactModels;
-                            contactsAdapter.setItems(contactList);
+                            contactList.clear();
+                            contactsAdapter.setItems(contactModels);
                             contactsAdapter.notifyDataSetChanged();
                         });
                     } else {
@@ -166,8 +168,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         else {
             //todo load data in contacts rv without search
             contactViewModel.getContacts().observe(getViewLifecycleOwner(), contactModels -> {
-                contactList = contactModels;
-                contactsAdapter.setItems(contactList);
+                contactList.clear();
+                contactsAdapter.setItems(contactModels);
                 contactsAdapter.notifyDataSetChanged();
             });
         }
@@ -202,6 +204,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 contactsAdapter.filter(s.toString());
+//                contactsAdapter.filter(s.toString());
             }
 
             @Override
@@ -228,7 +231,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private void setupAdapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        contactsAdapter = new PhoneContactsAdapter(getContext(), item -> {
+
+        contactsAdapter = new PhoneContactsAdapter(getContext(),item -> {
             screen.getText().clear();
             screen.getText().insert(screen.getSelectionStart(),item.getMobileNumber().toLowerCase().replaceAll("\\p{Z}",""));
             dialPad_cl.setVisibility(View.VISIBLE);

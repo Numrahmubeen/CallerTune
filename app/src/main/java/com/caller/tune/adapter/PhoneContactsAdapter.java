@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,11 +26,18 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PhoneContactsAdapter extends RecyclerView.Adapter {
+public class PhoneContactsAdapter extends RecyclerView.Adapter  {
 
     private List<ContactModel> contactsList;
     private List<ContactModel> listSearch;
     private Context context;
+    public PhoneContactsAdapter(Context context, OnItemClickListener listener) {
+        this.context = context;
+        listSearch =new ArrayList<>();
+        contactsList = new ArrayList<>();
+        this.listener = listener;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(ContactModel item);
     }
@@ -41,12 +50,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
     }
     private OnItemClickListener listener;
 
-    public PhoneContactsAdapter(Context context, OnItemClickListener listener) {
-        this.context = context;
-        listSearch =new ArrayList<>();
-        contactsList = new ArrayList<>();
-        this.listener = listener;
-    }
+
 
     @Override
     public ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

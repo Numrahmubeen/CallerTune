@@ -15,7 +15,10 @@ import com.caller.tune.models.ContactModel;
 import com.caller.tune.models.RecentCall;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -63,9 +66,28 @@ public class ContactRepository {
         // now that you have the fresh user data in freshUserList,
             // make it available to outside observers of the "users"
             // MutableLiveData object
-            contactsList.postValue(contacts);
+            ArrayList<ContactModel> distinctList = removeDuplicates(contacts);
+            contactsList.postValue(distinctList);
         });
 
         return contactsList;
     }
+    public ArrayList<ContactModel> removeDuplicates(ArrayList<ContactModel> list){
+        Set<ContactModel> set = new TreeSet((Comparator<ContactModel>) (o1, o2) -> {
+            String str1 = o1.getMobileNumber().replaceAll("\\s", "");
+            str1 = str1.replaceAll("-","");
+
+            String str2 = o2.getMobileNumber().replaceAll("\\s", "");
+            str2 = str2.replaceAll("-","");
+            if(str1.contains(str2)){
+                return 0;
+            }
+            return 1;
+        });
+        set.addAll(list);
+
+        final ArrayList newList = new ArrayList(set);
+        return newList;
+    }
+
 }
