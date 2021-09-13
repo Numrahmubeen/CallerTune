@@ -28,7 +28,7 @@ public class ContactRepository {
         this.context = context;
         contactsList = new MutableLiveData<>();
     }
-
+    //todo fetch contacts from Content Uri
     public MutableLiveData<ArrayList<ContactModel>> fetchContacts() {
 
         ExecutorService service =  Executors.newSingleThreadExecutor();

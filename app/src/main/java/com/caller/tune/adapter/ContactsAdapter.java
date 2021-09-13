@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RelativeLayout;
@@ -115,19 +116,26 @@ public class ContactsAdapter extends RecyclerView.Adapter {
         public void bind(final ContactModel contact)
         {
             checkBox.setChecked(contact.isSelected() ? true : false);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            itemView.setOnClickListener(v -> {
 
-                    contact.setSelected(!contact.isSelected());
-                    checkBox.setChecked(contact.isSelected() ? true : false);
-                    if(contact.isSelected())
-                    {
-                        mySelectedList.add(contact);
-                    }else if(!contact.isSelected() && mySelectedList.contains(contact)){
-                        mySelectedList.remove(contact);
+                contact.setSelected(!contact.isSelected());
+                checkBox.setChecked(contact.isSelected() ? true : false);
+                if(contact.isSelected())
+                {
+                    mySelectedList.add(contact);
+                }else if(!contact.isSelected() && mySelectedList.contains(contact)){
+                    mySelectedList.remove(contact);
 
-                    }
+                }
+
+            });
+            checkBox.setOnClickListener(v -> {
+                contact.setSelected(!contact.isSelected());
+                if(contact.isSelected())
+                {
+                    mySelectedList.add(contact);
+                }else if(!contact.isSelected() && mySelectedList.contains(contact)){
+                    mySelectedList.remove(contact);
 
                 }
             });

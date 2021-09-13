@@ -237,6 +237,8 @@ public class CallActivity extends AppCompatActivity {
     }
 
     // Set the UI for the call
+    //todo disable mute and hold call
+
     @SuppressLint("SetTextI18n")
     public void updateUi(Integer state) {
         // Set callInfo text by the state

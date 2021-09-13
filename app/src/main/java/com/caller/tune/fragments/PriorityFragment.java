@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.caller.tune.ChooseContactsActivity;
@@ -41,6 +42,7 @@ public class PriorityFragment extends Fragment {
     public PriorityContactsAdapter adapter;
     public ArrayList<ContactModel> priorityList;
     private ProgressBar progressBar;
+    private TextView noContacts_tv;
 
     public PriorityFragment() {
         // Required empty public constructor
@@ -62,6 +64,7 @@ public class PriorityFragment extends Fragment {
         priorityList = new ArrayList<>();
         recyclerView = view.findViewById(R.id.priority_contacts_rv);
         progressBar = view.findViewById(R.id.progressbar);
+        noContacts_tv = view.findViewById(R.id.noContacts_tv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         priorityList = db.getAllContacts();
@@ -76,20 +79,19 @@ public class PriorityFragment extends Fragment {
                     });
             adapter = new PriorityContactsAdapter(getContext(), priorityList);
             recyclerView.setAdapter(adapter);
+            noContacts_tv.setVisibility(View.GONE);
 
         }else {
-            Toast.makeText(getContext(), "No Priority Contact Found", Toast.LENGTH_SHORT).show();
+            noContacts_tv.setVisibility(View.VISIBLE);
+//            Toast.makeText(getContext(), "No Priority Contact Found", Toast.LENGTH_SHORT).show();
         }
         progressBar.setVisibility(View.GONE);
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setColorFilter(Color.WHITE);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ChooseContactsActivity.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getContext(), ChooseContactsActivity.class);
+            startActivity(intent);
         });
         return view;
 
@@ -111,12 +113,12 @@ public class PriorityFragment extends Fragment {
     public void refreshRV(){
         priorityList.clear();
         priorityList.addAll(db.getAllContacts());
-        Collections.sort(priorityList, new Comparator<ContactModel>() {
-            @Override
-            public int compare(ContactModel o1, ContactModel o2) {
-                return o1.getName().compareToIgnoreCase(o2.getName());
-            }
-        });
+        Collections.sort(priorityList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+        if(priorityList.size() == 0){
+            noContacts_tv.setVisibility(View.VISIBLE);
+        }
+        else
+            noContacts_tv.setVisibility(View.GONE);
         adapter = new PriorityContactsAdapter(getContext(),priorityList);
         adapter.notifyDataSetChanged();
     }

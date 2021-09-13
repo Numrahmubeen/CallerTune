@@ -7,6 +7,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAlignment="center"
+               android:id="@+id/noContacts_tv"
+               android:layout_centerInParent="true"
+               android:text="You haven't added any contacts \n Click + icon at bottom to add contact"/>
+
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
@@ -16,7 +24,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/priority_contacts_rv"
-        android:layout_marginTop="?actionBarSize"
+        android:layout_marginTop="@dimen/_10sdp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/header"

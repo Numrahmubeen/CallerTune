@@ -3,6 +3,7 @@ package com.caller.tune;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -20,6 +21,7 @@ import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.app.role.RoleManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentStateAdapter pagerAdapter;
     private MyDbHandler db;
     private String[] titles = new String[]{"Priority Contacts", "Phone", "Recent"};
-    TabLayout tabLayout;
+    private TabLayout tabLayout;
 
     private ActivityResultContracts.RequestMultiplePermissions requestMultiplePermissionsContract;
     private ActivityResultLauncher<String[]> multiplePermissionActivityResultLauncher;
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         managePermissions();
-
+        requestMutePermissions();
 //        if (!Settings.canDrawOverlays(this)) {
 //            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
 //                    Uri.parse("package:" + getPackageName()));
@@ -115,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         //displaying tabs
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(titles[position])).attach();
-        requestMutePermissions();
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]
@@ -135,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             multiplePermissionActivityResultLauncher.launch(PERMISSIONS);
         }
     }
-
 
     private boolean hasPermissions(String[] permissions) {
         if (permissions != null) {
@@ -159,8 +159,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void requestMutePermissions() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted()) {
-            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-            startActivity(intent);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Grant Permission");
+            builder.setMessage("Allow this app to access Do Not Disturb Permission");
+            builder.setPositiveButton("GRANT PERMISSION", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                    startActivity(intent);                }
+            });
+
+            builder.show();
+
         }
     }
 

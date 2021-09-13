@@ -61,6 +61,8 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
         ContactViewHolder holder = (ContactViewHolder) vholder;
 
         holder.contactName.setText(result.getName());
+
+        //todo there I am showing number in list with - or space
         String str = result.getMobileNumber().replaceAll("\\s", "");
         str = str.replaceAll("-","");
         holder.contactNumber.setText(str);
@@ -72,7 +74,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return contactsList.size();
     }
-
+    //todo search functionality in phone fragment
     public void filter(String text) {
         contactsList.clear();
         if(text.isEmpty()){
@@ -80,12 +82,24 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter {
         } else{
             text = text.toLowerCase();
             for(ContactModel item: listSearch){
-                if(item.getName().toLowerCase().replaceAll("\\p{Z}","").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\p{Z}","").contains(text)){
+                if(item.getName().toLowerCase().replaceAll("\\s", "").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\s", "").contains(text)){
                     contactsList.add(item);
                 }
             }
         }
         notifyDataSetChanged();
+//        contactsList.clear();
+//        if(text.isEmpty()){
+//            contactsList.addAll(listSearch);
+//        } else{
+//            text = text.toLowerCase();
+//            for(ContactModel item: listSearch){
+//                if(item.getName().toLowerCase().replaceAll("\\p{Z}","").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\p{Z}","").contains(text)){
+//                    contactsList.add(item);
+//                }
+//            }
+//        }
+//        notifyDataSetChanged();
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {

@@ -77,7 +77,6 @@ public class ChooseContactsActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private ContactViewModel contactViewModel;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -246,6 +246,7 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
         back_iv = findViewById(R.id.callHistory_back_iv);
         gotoContactDetailsDivider_view = findViewById(R.id.callHistory_gotoContactDetails_view);
     }
+    //todo should check if default sim selected
     private boolean checkSimAvailability() {
         // cursor_call_logs.getColumnIndexOrThrow("subscription_id")
 

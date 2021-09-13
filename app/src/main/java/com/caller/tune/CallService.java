@@ -1,6 +1,7 @@
 package com.caller.tune;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
@@ -259,17 +262,16 @@ public class CallService extends InCallService {
             Toast.makeText(this, "Ringer Mode Changed to: Sound", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void manageNotification(String callTyp, String callerName) {
 
         Intent acceptIntent = new Intent(this, CallService.class);
         acceptIntent.setAction(ACCEPT_CALL);
         PendingIntent pendingAnswerIntent = PendingIntent.getService(this, 0, acceptIntent, 0);
- //       Action receiveAction = new Action(android.R.drawable.ic_media_play, "ACCEPT", pendingPlayIntent);
 
         Intent rejectIntent = new Intent(this, CallService.class);
         rejectIntent.setAction(REJECT_CALL);
         PendingIntent pendingRejectIntent = PendingIntent.getService(this, 1, rejectIntent, 0);
-//        Action rejectAction = new Action(android.R.drawable.ic_media_play, "REJECT", pendingRejectIntent);
 
 
         Intent notifyIntent = new Intent(this, CallActivity.class);
@@ -289,25 +291,50 @@ public class CallService extends InCallService {
         smallNotificationLayout.setTextViewText(R.id.notification_small_incoming_caller,callerName);
         smallNotificationLayout.setOnClickPendingIntent(R.id.notification_small_accept_call_iv,pendingAnswerIntent);
         smallNotificationLayout.setOnClickPendingIntent(R.id.notification_small_reject_call_iv,pendingRejectIntent);
+        String NOTIFICATION_CHANNEL_ID = getPackageName();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String channelName = "My Background Service";
+            NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH);
+            chan.setLightColor(Color.BLUE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert manager != null;
+            manager.createNotificationChannel(chan);
+        }
 
         notificationBuilder =
-                new Builder(this, "CHANNEL_ID")
+                new Builder(this, NOTIFICATION_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_phone_colorful)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setCategory(NotificationCompat.CATEGORY_CALL)
                         .setStyle(new DecoratedCustomViewStyle())
                         .setCustomContentView(smallNotificationLayout)
                         .setCustomBigContentView(notificationLayout)
-//                        .setContentTitle(callTyp)
-//                        .setContentText(callerName)
-//                        .addAction(receiveAction)
-//                        .addAction(rejectAction)
                         .setFullScreenIntent(notifyPendingIntent, true);
         notificationBuilder.setSilent(true);
 
         Notification incomingCallNotification = notificationBuilder.build();
         startForeground(NOTIF_ID, incomingCallNotification);
 
+    }
+
+    @NonNull
+    @TargetApi(26)
+    private synchronized String createChannel() {
+        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String name = "call notification";
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+
+        NotificationChannel mChannel = new NotificationChannel("callNotification", name, importance);
+        mChannel.enableLights(true);
+        if (mNotificationManager != null) {
+            mNotificationManager.createNotificationChannel(mChannel);
+        } else {
+            stopSelf();
+        }
+        return "callNotification";
     }
     public static ContactModel retrieveContactInfo(Context context, String number) {
         ContactModel contactModel = new ContactModel();
@@ -349,56 +376,10 @@ public class CallService extends InCallService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //  ContactModel contactModel = new ContactModel("name","number",photo,myMsg);
         contactModel.setMobileNumber(number);
         return contactModel;
     }
 
-
-
-//    private void manageNotification(String callTyp, String callerName) {
-//
-//        Intent acceptIntent = new Intent(this, CallService.class);
-//        acceptIntent.setAction(ACCEPT_CALL);
-//        PendingIntent pendingPlayIntent = PendingIntent.getService(this, 0, acceptIntent, 0);
-//        NotificationCompat.Action receiveAction = new NotificationCompat.Action(android.R.drawable.ic_media_play, "ACCEPT", pendingPlayIntent);
-//
-//        Intent rejectIntent = new Intent(this, CallService.class);
-//        rejectIntent.setAction(REJECT_CALL);
-//        PendingIntent pendingRejectIntent = PendingIntent.getService(this, 0, rejectIntent, 0);
-//        NotificationCompat.Action rejectAction = new NotificationCompat.Action(android.R.drawable.ic_media_play, "REJECT", pendingRejectIntent);
-//
-////        Intent fullScreenIntent = new Intent(this, CallActivity.class);
-////        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
-////                fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        Intent notifyIntent = new Intent(this, CallActivity.class);
-//    // Set the Activity to start in a new, empty task
-//        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-//                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//    // Create the PendingIntent
-//        PendingIntent notifyPendingIntent = PendingIntent.getActivity(
-//                this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
-//        );
-//
-//        notificationBuilder =
-//                new NotificationCompat.Builder(this, "CHANNEL_ID")
-//                        .setSmallIcon(R.drawable.ic_phone_colorful)
-//                        .setContentTitle(callTyp)
-//                        .setContentText(callerName)
-////                        .addAction(R.drawable.circle_bg, "Receive Call", receiveCallPendingIntent)
-//                        .addAction(receiveAction)
-//                        .addAction(rejectAction)
-//                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                        .setCategory(NotificationCompat.CATEGORY_CALL)
-////                        .setContentIntent(notifyPendingIntent)
-//                        .setFullScreenIntent(notifyPendingIntent, true);
-//        notificationBuilder.setSilent(true);
-//
-//        Notification incomingCallNotification = notificationBuilder.build();
-//        startForeground(NOTIF_ID, incomingCallNotification);
-//
-//    }
 
     @Override
     public void onCallRemoved(Call call) {

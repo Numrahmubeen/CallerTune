@@ -38,8 +38,7 @@ public class ContactViewModel extends AndroidViewModel {
         repository = new ContactRepository(application);
         contacts = new MutableLiveData<>();
     }
-
-
+    //todo load data in contacts rv without search
     public MutableLiveData<ArrayList<ContactModel>> getContacts() {
         contacts = repository.fetchContacts();
         return contacts;

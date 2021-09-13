@@ -59,7 +59,6 @@ public class RecentCallsFragment extends Fragment {
     private SectionedRecyclerViewAdapter sectionedAdapter;
     private ProgressBar progressBar;
 
-
     public RecentCallsFragment() {
     }
 

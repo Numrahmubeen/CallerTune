@@ -131,8 +131,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         });
-
-
         return view;
     }
     String retrieveLastCallSummary() {
@@ -147,18 +145,15 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         managedCursor.close();
         return phNumber;
     }
-
+//todo search functionality in phone fragment
     private void setupSearchRV() {
         ActivityResultLauncher<String> requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
-                        contactViewModel.getContacts().observe(getViewLifecycleOwner(), new Observer<ArrayList<ContactModel>>() {
-                            @Override
-                            public void onChanged(ArrayList<ContactModel> contactModels) {
-                                contactList = contactModels;
-                                contactsAdapter.setItems(contactList);
-                                contactsAdapter.notifyDataSetChanged();
-                            }
+                        contactViewModel.getContacts().observe(getViewLifecycleOwner(), contactModels -> {
+                            contactList = contactModels;
+                            contactsAdapter.setItems(contactList);
+                            contactsAdapter.notifyDataSetChanged();
                         });
                     } else {
                         Toast.makeText(getContext(), "Permission is required to Select from contacts", Toast.LENGTH_SHORT).show();
@@ -169,9 +164,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             requestPermissionLauncher.launch(READ_CONTACTS);
         }
         else {
+            //todo load data in contacts rv without search
             contactViewModel.getContacts().observe(getViewLifecycleOwner(), contactModels -> {
                 contactList = contactModels;
-//                Collections.sort(contactList, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
                 contactsAdapter.setItems(contactList);
                 contactsAdapter.notifyDataSetChanged();
             });
@@ -184,7 +179,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                contactsAdapter.filter(s.toString());
+                if(s.length()>2)
+                    contactsAdapter.filter(s.toString());
             }
 
             @Override
@@ -205,10 +201,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>2)
-                    contactsAdapter.filter(s.toString());
-                else
-                    contactsAdapter.setItems(contactList);
+                contactsAdapter.filter(s.toString());
             }
 
             @Override
@@ -370,7 +363,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-
+//todo should check if default sim selected
     private boolean checkSimAvailability() {
         // cursor_call_logs.getColumnIndexOrThrow("subscription_id")
         final SubscriptionManager subscriptionManager = SubscriptionManager.from(getContext().getApplicationContext());
