@@ -40,6 +40,7 @@ import android.os.Looper;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.provider.Telephony;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
 import android.telephony.SubscriptionInfo;
@@ -73,6 +74,7 @@ import com.caller.tune.viewModels.ContactViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -135,19 +137,20 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         });
         return view;
     }
+
     String retrieveLastCallSummary() {
         String phNumber = null;
         Uri contacts = CallLog.Calls.CONTENT_URI;
         Cursor managedCursor = getContext().getContentResolver().query(
                 contacts, null, null, null, null);
-        int number = managedCursor.getColumnIndex( CallLog.Calls.NUMBER );
-        if( managedCursor.moveToFirst() == true ) {
-             phNumber = managedCursor.getString( number );
+        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+        if (managedCursor.moveToFirst() == true) {
+            phNumber = managedCursor.getString(number);
         }
         managedCursor.close();
         return phNumber;
     }
-//todo search functionality in phone fragment
+
     private void setupSearchRV() {
         ActivityResultLauncher<String> requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -164,9 +167,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
         if (ContextCompat.checkSelfPermission(getContext(), READ_CONTACTS) != PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(READ_CONTACTS);
-        }
-        else {
-            //todo load data in contacts rv without search
+        } else {
             contactViewModel.getContacts().observe(getViewLifecycleOwner(), contactModels -> {
                 contactList.clear();
                 contactsAdapter.setItems(contactModels);
@@ -181,8 +182,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>2)
-                    contactsAdapter.filter(s.toString());
+                contactsAdapter.filter(s.toString());
             }
 
             @Override
@@ -232,9 +232,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        contactsAdapter = new PhoneContactsAdapter(getContext(),item -> {
+        contactsAdapter = new PhoneContactsAdapter(getContext(), item -> {
             screen.getText().clear();
-            screen.getText().insert(screen.getSelectionStart(),item.getMobileNumber().toLowerCase().replaceAll("\\p{Z}",""));
+            screen.getText().insert(screen.getSelectionStart(), item.getMobileNumber().toLowerCase().replaceAll("\\p{Z}", ""));
             dialPad_cl.setVisibility(View.VISIBLE);
             showDialPad_iv.setVisibility(View.GONE);
         });
@@ -329,13 +329,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 display("#");
                 break;
             case R.id.dialpad_call_button:
-                if(screen.getText().length()>2){
-                    boolean dualActive = checkSimAvailability();
-                    if (dualActive) {
-                        selectSim();
-                    }
-                    else
-                        makeCall(-1);
+                if (screen.getText().length() > 2) {
+                    makeCall();
                 }
                 else {
                     if(retrieveLastCallSummary() != null)
@@ -367,49 +362,42 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-//todo should check if default sim selected
-    private boolean checkSimAvailability() {
-        // cursor_call_logs.getColumnIndexOrThrow("subscription_id")
-        final SubscriptionManager subscriptionManager = SubscriptionManager.from(getContext().getApplicationContext());
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-
-            return false;
-        }
-        final List<SubscriptionInfo> activeSubscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
-        int simCount = activeSubscriptionInfoList.size();
-        if(simCount > 1){
-            return true;
-        }
-//        btnBack.setText(simCount+" Sim available");
-//        Log.d("MainActivity: ","simCount:" +simCount);
-//        for (SubscriptionInfo subscriptionInfo : activeSubscriptionInfoList) {
-//            Log.d("MainActivity: ","iccId :"+ subscriptionInfo.getIccId()+" , name : "+ subscriptionInfo.getDisplayName());
+//    private boolean checkSimAvailability() {
+//        // cursor_call_logs.getColumnIndexOrThrow("subscription_id")
+//        final SubscriptionManager subscriptionManager = SubscriptionManager.from(getContext().getApplicationContext());
+//        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            Toast.makeText(getContext(), "Need permission: READ PHONE STATE", Toast.LENGTH_SHORT).show();
+//            return false;
 //        }
-            return false;
-    }
-
-    private void selectSim(){
-        final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_select_sim);
-
-        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
-        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
-
-        sim1_tv.setOnClickListener(v -> {
-            makeCall(0);
-            dialog.dismiss();
-        });
-        sim2_tv.setOnClickListener(v -> {
-            makeCall(1);
-            dialog.dismiss();
-        });
-        dialog.show();
-
-
-    }
-
-    private void makeCall(int simNumber) {
+//        final List<SubscriptionInfo> activeSubscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
+//        int simCount = activeSubscriptionInfoList.size();
+//        if(simCount > 1){
+//            return true;
+//        }
+//            return false;
+//    }
+//
+//    private void selectSim(){
+//        final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.dialog_select_sim);
+//
+//        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
+//        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
+//
+//        sim1_tv.setOnClickListener(v -> {
+//            makeCall(0);
+//            dialog.dismiss();
+//        });
+//        sim2_tv.setOnClickListener(v -> {
+//            makeCall(1);
+//            dialog.dismiss();
+//        });
+//        dialog.show();
+//
+//
+//    }
+    private void makeCall() {
         Intent intent = new Intent("android.intent.action.CALL",Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
         intent.setData(Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
         intent.putExtra("com.android.phone.force.slot", true);
@@ -422,13 +410,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 return;
             }
             List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
-            if (simNumber == 0) {  // simNumber = 0 or 1 according to sim......
-                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 0)
-                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(0));
-            } else if(simNumber == 1) {
-                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 1)
-                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(1));
-            }
             startActivity(intent);
         }
     }

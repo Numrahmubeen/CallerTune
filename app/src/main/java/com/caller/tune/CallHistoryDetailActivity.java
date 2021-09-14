@@ -72,11 +72,7 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
         requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
-                        boolean dualActive = checkSimAvailability();
-                        if (dualActive) {
-                            selectSim();
-                        } else
-                            makeCall(-1);
+                        makeCall();
                     } else {
                         Toast.makeText(this, "Permission is required.", Toast.LENGTH_SHORT).show();
                     }
@@ -97,12 +93,9 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
         makeCall_ll.setOnClickListener(v -> {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissionLauncher.launch(READ_PHONE_STATE);
-            } else {
-                boolean dualActive = checkSimAvailability();
-                if (dualActive) {
-                    selectSim();
-                } else
-                    makeCall(-1);
+            } else
+                {
+                makeCall();
             }
         });
         addToContacts_ll.setOnClickListener(v->{
@@ -246,43 +239,8 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
         back_iv = findViewById(R.id.callHistory_back_iv);
         gotoContactDetailsDivider_view = findViewById(R.id.callHistory_gotoContactDetails_view);
     }
-    //todo should check if default sim selected
-    private boolean checkSimAvailability() {
-        // cursor_call_logs.getColumnIndexOrThrow("subscription_id")
 
-        final SubscriptionManager subscriptionManager = SubscriptionManager.from(getApplicationContext());
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(READ_PHONE_STATE);
-        }
-        final List<SubscriptionInfo> activeSubscriptionInfoList = subscriptionManager.getActiveSubscriptionInfoList();
-        int simCount = activeSubscriptionInfoList.size();
-        if(simCount > 1){
-            return true;
-        }
-        return false;
-    }
-    private void selectSim(){
-        final BottomSheetDialog dialog = new BottomSheetDialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_select_sim);
-
-        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
-        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
-
-        sim1_tv.setOnClickListener(v -> {
-            makeCall(0);
-            dialog.dismiss();
-        });
-        sim2_tv.setOnClickListener(v -> {
-            makeCall(1);
-            dialog.dismiss();
-        });
-        dialog.show();
-
-
-    }
-    private void makeCall(int simNumber) {
+    private void makeCall() {
         Intent intent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + phoneNumber));
         intent.setData(Uri.parse("tel:" + phoneNumber));
         intent.putExtra("com.android.phone.force.slot", true);
@@ -295,13 +253,6 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
                 return;
             }
             List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
-            if (simNumber == 0) {  // simNumber = 0 or 1 according to sim......
-                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 0)
-                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(0));
-            } else if(simNumber == 1) {
-                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 1)
-                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(1));
-            }
             startActivity(intent);
         }
     }

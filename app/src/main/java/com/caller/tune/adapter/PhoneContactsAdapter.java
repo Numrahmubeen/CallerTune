@@ -66,7 +66,6 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
 
         holder.contactName.setText(result.getName());
 
-        //todo there I am showing number in list with - or space
         String str = result.getMobileNumber().replaceAll("\\s", "");
         str = str.replaceAll("-","");
         holder.contactNumber.setText(str);
@@ -78,7 +77,6 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
     public int getItemCount() {
         return contactsList.size();
     }
-    //todo search functionality in phone fragment
     public void filter(String text) {
         contactsList.clear();
         if(text.isEmpty()){
