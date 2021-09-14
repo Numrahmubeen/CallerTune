@@ -12,6 +12,8 @@
         style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_alignParentTop="true"
         android:textColor="@color/green_noti_text"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ongoing Call" />
@@ -19,11 +21,14 @@
         android:id="@+id/notification_small_incoming_caller"
         style="@style/TextAppearance.Compat.Notification.Media"
         android:layout_below="@+id/notification_small_title_tv"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/black"
         android:layout_marginTop="@dimen/_6sdp"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
+        android:maxWidth="@dimen/_180sdp"
         android:layout_height="wrap_content"
         android:text="Mom Jazz" />
     <ImageView

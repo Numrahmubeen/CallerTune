@@ -18,6 +18,7 @@
         android:id="@+id/notification_incoming_caller"
         style="@style/TextAppearance.Compat.Notification.Media"
         android:textColor="@color/black"
+        android:maxLines="1"
         android:layout_marginTop="@dimen/_8sdp"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"

@@ -238,7 +238,7 @@ public class CallActivity extends AppCompatActivity {
     void finish(Integer state){
         finish();
     }
-
+//todo add bluetooth functionality during call
     // Set the UI for the call
     @SuppressLint("SetTextI18n")
     public void updateUi(Integer state) {

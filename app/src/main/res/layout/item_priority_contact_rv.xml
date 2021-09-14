@@ -34,7 +34,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/_180sdp"
             android:id="@+id/contact_name_tv"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:layout_toRightOf="@id/contact_civ"
             android:textSize="@dimen/_16ssp"
             android:textStyle="bold"
@@ -43,6 +46,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/_180sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:id="@+id/contact_number_tv"
             android:layout_toRightOf="@id/contact_civ"
             android:textSize="@dimen/_12ssp"
