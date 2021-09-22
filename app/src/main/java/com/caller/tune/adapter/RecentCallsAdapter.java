@@ -73,7 +73,7 @@ public class RecentCallsAdapter extends Section {
         final RecentCallsViewHolder holder = (RecentCallsViewHolder) vHolder;
 
         final RecentCall result = recentCallList.get(position);
-        if (result.getName() != null && result.getName() != "") {
+        if (result.getName() != null && result.getName().length() != 0) {
             holder.contactName.setText(result.getName());
         } else
             holder.contactName.setText(result.getPhoneNumber());
