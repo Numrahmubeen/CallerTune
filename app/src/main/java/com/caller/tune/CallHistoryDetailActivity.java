@@ -245,6 +245,7 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
         intent.setData(Uri.parse("tel:" + phoneNumber));
         intent.putExtra("com.android.phone.force.slot", true);
         intent.putExtra("Cdma_Supp", true);
+        intent.setPackage("com.android.server.telecom");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {

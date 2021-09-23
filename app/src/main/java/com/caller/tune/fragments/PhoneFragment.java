@@ -43,6 +43,7 @@ import android.provider.MediaStore;
 import android.provider.Telephony;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
+import android.telecom.VideoProfile;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -138,18 +139,18 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    String retrieveLastCallSummary() {
-        String phNumber = null;
-        Uri contacts = CallLog.Calls.CONTENT_URI;
-        Cursor managedCursor = getContext().getContentResolver().query(
-                contacts, null, null, null, null);
-        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
-        if (managedCursor.moveToFirst() == true) {
-            phNumber = managedCursor.getString(number);
-        }
-        managedCursor.close();
-        return phNumber;
-    }
+//    String retrieveLastCallSummary() {
+//        String phNumber = null;
+//        Uri contacts = CallLog.Calls.CONTENT_URI;
+//        Cursor managedCursor = getContext().getContentResolver().query(
+//                contacts, null, null, null, null);
+//        int number = managedCursor.getColumnIndex(CallLog.Calls.NUMBER);
+//        if (managedCursor.moveToFirst() == true) {
+//            phNumber = managedCursor.getString(number);
+//        }
+//        managedCursor.close();
+//        return phNumber;
+//    }
 
     private void setupSearchRV() {
         ActivityResultLauncher<String> requestPermissionLauncher =
@@ -333,8 +334,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     makeCall();
                 }
                 else {
-                    if(retrieveLastCallSummary() != null)
-                        screen.setText(retrieveLastCallSummary());
+                    Toast.makeText(getContext(),"Please dial or select a number to make a call.", Toast.LENGTH_SHORT).show();
+//                    if(retrieveLastCallSummary() != null)
+//                        screen.setText(retrieveLastCallSummary());
                 }
                 break;
             case R.id.btnDel:
@@ -398,10 +400,12 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 //
 //    }
     private void makeCall() {
+
         Intent intent = new Intent("android.intent.action.CALL",Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
         intent.setData(Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
         intent.putExtra("com.android.phone.force.slot", true);
         intent.putExtra("Cdma_Supp", true);
+        intent.setPackage("com.android.server.telecom");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             TelecomManager telecomManager = (TelecomManager) getActivity().getSystemService(Context.TELECOM_SERVICE);
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -409,7 +413,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{READ_PHONE_STATE}, 2);
                 return;
             }
-            List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
             startActivity(intent);
         }
     }

@@ -136,8 +136,6 @@ public class PriorityContactsAdapter extends RecyclerView.Adapter {
                     actionMode.setTitle(String.valueOf(removedList.size()) + " " + " SELECTED");
 
                 }
-            }else {
-                Toast.makeText(context, "Ring Mode: " + result.getCallRingMode(), Toast.LENGTH_SHORT).show();
             }
 
         });

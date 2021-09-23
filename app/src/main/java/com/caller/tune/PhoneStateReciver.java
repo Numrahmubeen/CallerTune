@@ -18,20 +18,21 @@ import com.caller.tune.params.Params;
 import java.util.ArrayList;
 
 
-public class PhoneStateReciver extends BroadcastReceiver {
-
-    String savedNumber;
-    private ArrayList<ContactModel> priorityContactsList;
-    private MyDbHandler db;
-    private boolean isIncomingNumberPriority = false;
-    private ContactModel incomingCallContact;
-    private int ringerMode, requiredRingMode;
-    private AudioManager am;
-    private Context context;
-    Ringtone r;
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        try {
+public class PhoneStateReciver {}
+//        extends BroadcastReceiver {
+//
+//    String savedNumber;
+//    private ArrayList<ContactModel> priorityContactsList;
+//    private MyDbHandler db;
+//    private boolean isIncomingNumberPriority = false;
+//    private ContactModel incomingCallContact;
+//    private int ringerMode, requiredRingMode;
+//    private AudioManager am;
+//    private Context context;
+//    Ringtone r;
+//    @Override
+//    public void onReceive(Context context, Intent intent) {
+ //       try {
 //            this.context = context;
 //            if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL"))
 //            {
@@ -82,11 +83,11 @@ public class PhoneStateReciver extends BroadcastReceiver {
 //                MediaPlayer ring = MediaPlayer.create(context, resID);
 //                ring.start();
 //            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 //    private void managePriorityContacts() {
 //        for (ContactModel c:priorityContactsList)
 //        {
@@ -146,7 +147,7 @@ public class PhoneStateReciver extends BroadcastReceiver {
 //            Toast.makeText(context, "Ringer Mode Changed to: " + requiredRingMode, Toast.LENGTH_SHORT).show();
 //        }
 //    }
-}
+//}
 //Best code
 
 //    public void onReceive(Context context, Intent intent) {

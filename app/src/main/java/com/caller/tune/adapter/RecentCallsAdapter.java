@@ -88,7 +88,6 @@ public class RecentCallsAdapter extends Section {
                     intent.putExtra("name",result.getName());
                     intent.putExtra("callerDp",result.getCallerDp());
                     context.startActivity(intent);
-                    //                Toast.makeText(context, "Sim Id is: "+result.getSubscriberId(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
