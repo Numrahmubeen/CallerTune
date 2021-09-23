@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.telecom.Call;
 import android.telecom.InCallService;
 import android.telephony.PhoneNumberUtils;
@@ -74,6 +75,7 @@ public class CallService extends InCallService {
     private Call myCall;
     private Preference preference;
     private RemoteViews smallNotificationLayout,notificationLayout;
+    private int dnd;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -162,10 +164,20 @@ public class CallService extends InCallService {
 
             if(preference.getRingMode() != preference.getRequiredRingMode())
             {
-                am.setRingerMode(preference.getRingMode());
-                incomingCallContact = null;
-                if(preference.getRingerModeName() != null){
-                    Toast.makeText(this, "Ringer Mode Changed to: "+ preference.getRingerModeName(), Toast.LENGTH_SHORT).show();
+                if(preference.getRingerModeName().equals("DND"))
+                {
+                    NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+                    incomingCallContact = null;
+                    Toast.makeText(this, "Switched to DND.", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    am.setRingerMode(preference.getRingMode());
+                    incomingCallContact = null;
+                    if(preference.getRingerModeName() != null){
+                        Toast.makeText(this, "Ringer Mode Changed to: "+ preference.getRingerModeName(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
             preference.setRequiredRingMode(1111);
@@ -190,9 +202,52 @@ public class CallService extends InCallService {
             }
         }
         if(incomingCallContact != null) {
-            ringerMode = am.getRingerMode();
-            switch (ringerMode)
+
+            requiredRingMode = am.getRingerMode();
+            if (incomingCallContact.getCallRingMode().equals(Params.AM_RING_MODE))
             {
+                setRingerModeAndRingerName();
+                setRingingMode();
+            }
+            else if (incomingCallContact.getCallRingMode().equals(Params.AM_SILENT_MODE)){
+                ringerMode = am.getRingerMode();
+                switch (ringerMode) {
+                    case AudioManager.RINGER_MODE_VIBRATE:
+                        ringerModeName = "Vibrate";
+                        break;
+                    case AudioManager.RINGER_MODE_SILENT:
+                        ringerModeName = "Silent";
+                        break;
+                    case AudioManager.RINGER_MODE_NORMAL:
+                        ringerModeName = "Sound";
+                }
+                setSilentMode();
+            }
+            else if (incomingCallContact.getCallRingMode().equals(Params.AM_VIBRATE_MODE)) {
+                setRingerModeAndRingerName();
+                setVibratingMode();
+            } else
+                Toast.makeText(this, "incoming call contact ring mode: " + incomingCallContact.getCallRingMode(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setRingerModeAndRingerName() {
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        // Check if the notification policy access has been granted for the app.
+        if (!notificationManager.isNotificationPolicyAccessGranted()) {
+            Intent intent = new
+                    Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            startActivity(intent);
+            return;
+        }
+        if(ToggleDoNotDisturb(notificationManager)){
+            ringerMode = 1122;
+            ringerModeName = "DND";
+        }
+        else
+        {
+            ringerMode = am.getRingerMode();
+            switch (ringerMode) {
                 case AudioManager.RINGER_MODE_VIBRATE:
                     ringerModeName = "Vibrate";
                     break;
@@ -202,31 +257,33 @@ public class CallService extends InCallService {
                 case AudioManager.RINGER_MODE_NORMAL:
                     ringerModeName = "Sound";
             }
-            requiredRingMode = am.getRingerMode();
-            if (incomingCallContact.getCallRingMode().equals(Params.AM_RING_MODE))
-                setRingingMode();
-            else if (incomingCallContact.getCallRingMode().equals(Params.AM_SILENT_MODE))
-                setSilentMode();
-            else if (incomingCallContact.getCallRingMode().equals(Params.AM_VIBRATE_MODE)){
-                setVibratingMode();
-            }
-            else
-                Toast.makeText(this, "incming call contact ring mode: "+incomingCallContact.getCallRingMode(), Toast.LENGTH_SHORT).show();
         }
     }
 
+    private boolean ToggleDoNotDisturb(NotificationManager notificationManager) {
+        if (notificationManager.getCurrentInterruptionFilter() == NotificationManager.INTERRUPTION_FILTER_ALL)
+        {
+            return false;
+        }
+        else
+        {
+            dnd = notificationManager.getCurrentInterruptionFilter();
+            notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL);
+            Toast.makeText(sInstance, "DND turn Off " + dnd +"  new "+notificationManager.getCurrentInterruptionFilter(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    }
     private void setSilentMode() {
         requiredRingMode = AudioManager.RINGER_MODE_SILENT;
         if (ringerMode != requiredRingMode) {
-            preference.setRequiredRingMode(requiredRingMode);
-            preference.setRingMode(ringerMode);
-            preference.setRingerModeName(ringerModeName);
-
-            am.setRingerMode(requiredRingMode);
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             r = RingtoneManager.getRingtone(this, notification);
             if(r.isPlaying())
                 r.stop();
+            am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+            preference.setRequiredRingMode(requiredRingMode);
+            preference.setRingMode(ringerMode);
+            preference.setRingerModeName(ringerModeName);
             Toast.makeText(this, "Ringer Mode Changed to: Silent" , Toast.LENGTH_SHORT).show();
         }
 
