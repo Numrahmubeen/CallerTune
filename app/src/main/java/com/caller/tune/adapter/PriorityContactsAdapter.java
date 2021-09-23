@@ -111,13 +111,20 @@ public class PriorityContactsAdapter extends RecyclerView.Adapter {
         {
             holder.isCheck_iv.setVisibility(View.GONE);
         }
+        else
+        {
+            holder.isCheck_iv.setVisibility(View.VISIBLE);
+            holder.isCheck_iv.setImageResource(R.drawable.ic_check_box_blank);
+        }
         if(action_mode && selectAll)
         {
             holder.isCheck_iv.setVisibility(View.VISIBLE);
+            holder.isCheck_iv.setImageResource(R.drawable.ic_checked_box);
+
         }
         else if(action_mode && unSelectAll)
         {
-            holder.isCheck_iv.setVisibility(View.GONE);
+            holder.isCheck_iv.setImageResource(R.drawable.ic_check_box_blank);
         }
 
         holder.row.setOnLongClickListener(v -> {
@@ -128,10 +135,10 @@ public class PriorityContactsAdapter extends RecyclerView.Adapter {
             if(action_mode){
                 if (!removedList.contains(contactsList.get(position))) {
                     removedList.add(contactsList.get(position));
-                    holder.isCheck_iv.setVisibility(View.VISIBLE);
+                    holder.isCheck_iv.setImageResource(R.drawable.ic_checked_box);
                     actionMode.setTitle(String.valueOf(removedList.size()) + " " + " SELECTED");
                 } else {
-                    holder.isCheck_iv.setVisibility(View.GONE);
+                    holder.isCheck_iv.setImageResource(R.drawable.ic_check_box_blank);
                     removedList.remove(contactsList.get(position));
                     actionMode.setTitle(String.valueOf(removedList.size()) + " " + " SELECTED");
 

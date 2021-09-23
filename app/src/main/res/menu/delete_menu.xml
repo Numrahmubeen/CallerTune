@@ -9,7 +9,7 @@
     <item android:id="@+id/select_all"
         android:title="Select All"
         android:iconTint="@color/white"
-        android:icon="@drawable/ic_checked_box"
+        android:icon="@drawable/ic_checked_all_box"
         app:showAsAction="always"/>
 
 </menu>
