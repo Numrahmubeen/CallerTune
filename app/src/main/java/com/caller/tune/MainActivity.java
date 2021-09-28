@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.WRITE_CALL_LOG,
             Manifest.permission.MODIFY_AUDIO_SETTINGS,
             Manifest.permission.USE_FULL_SCREEN_INTENT,
+            Manifest.permission.DISABLE_KEYGUARD
 
     };
 

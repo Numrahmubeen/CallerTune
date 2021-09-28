@@ -376,23 +376,6 @@ public class CallService extends InCallService {
 
     }
 
-    @NonNull
-    @TargetApi(26)
-    private synchronized String createChannel() {
-        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        String name = "call notification";
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-
-        NotificationChannel mChannel = new NotificationChannel("callNotification", name, importance);
-        mChannel.enableLights(true);
-        if (mNotificationManager != null) {
-            mNotificationManager.createNotificationChannel(mChannel);
-        } else {
-            stopSelf();
-        }
-        return "callNotification";
-    }
     public static ContactModel retrieveContactInfo(Context context, String number) {
         ContactModel contactModel = new ContactModel();
         ContentResolver contentResolver = context.getContentResolver();

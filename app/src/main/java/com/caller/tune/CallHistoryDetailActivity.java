@@ -255,6 +255,7 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
             }
             List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
             startActivity(intent);
-        }
+        } else
+            Toast.makeText(this, "Your device incompatible to make a call from this app.", Toast.LENGTH_SHORT).show();
     }
 }

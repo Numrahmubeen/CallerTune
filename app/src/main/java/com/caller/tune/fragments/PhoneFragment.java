@@ -242,21 +242,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(contactsAdapter);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(getContext(), CALL_PHONE) == PERMISSION_GRANTED) {
-                        Toast.makeText(getContext(), "Permission Granted!", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getContext(), "No Permission Granted!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
     private void initializeView(View view) {
         screen = view.findViewById(R.id.screen);
         searchView_et = view.findViewById(R.id.searchView);
@@ -415,5 +400,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             }
             startActivity(intent);
         }
+        else
+            Toast.makeText(getContext(), "Your device incompatible to make a call from this app.", Toast.LENGTH_SHORT).show();
     }
 }

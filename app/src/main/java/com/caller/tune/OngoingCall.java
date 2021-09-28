@@ -51,7 +51,12 @@ public final class OngoingCall {
     // Hangup the call
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static void hangup() {
-        call.disconnect();
+        try {
+            call.disconnect();
+        }
+        catch (Exception e){
+
+        }
     }
 
     static {

@@ -7,41 +7,50 @@
     android:background="@drawable/bg_call_activity"
     android:layout_height="match_parent"
     tools:context=".CallActivity">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="?actionBarSize"
+        android:id="@+id/rl">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:id="@+id/phone_state_tv"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/ic_phone"
+            android:drawablePadding="@dimen/_8sdp"
+            android:textSize="@dimen/_14ssp"
+            android:layout_centerHorizontal="true"
+            android:text="Incoming Call"/>
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:visibility="gone"
+            android:id="@+id/chronometer"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/ic_phone"
+            android:drawablePadding="@dimen/_8sdp"
+            android:textSize="@dimen/_14ssp"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/phone_state_tv"
-        android:textColor="@color/white"
-        android:drawableLeft="@drawable/ic_phone"
-        android:drawablePadding="@dimen/_8sdp"
-        android:textSize="@dimen/_14ssp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:text="Incoming Call"/>
-    <Chronometer
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/chronometer"
-        android:layout_alignParentTop="true"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        android:drawableLeft="@drawable/ic_phone"
-        android:drawablePadding="@dimen/_8sdp"
-        android:textSize="@dimen/_14ssp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/_20sdp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:textSize="@dimen/_18ssp"
-        android:layout_below="@id/chronometer"
+        android:layout_below="@id/rl"
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_centerHorizontal="true"
         android:id="@+id/caller_name_tv"
-        android:layout_marginTop="@dimen/_50sdp"
+
         android:text="Caller Name or Number"/>
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="@dimen/_60sdp"

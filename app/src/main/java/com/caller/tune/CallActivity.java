@@ -83,6 +83,7 @@ public class CallActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
+
         setContentView(R.layout.activity_call);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
@@ -305,7 +306,10 @@ public class CallActivity extends AppCompatActivity {
         }
 
         if (state == Call.STATE_DIALING ||  state == Call.STATE_ACTIVE)
+        {
             inCall_cv.setVisibility(View.VISIBLE);
+            callRinging_ll.setVisibility(View.GONE);
+        }
 
     }
     void enableHoldAndMute(){
