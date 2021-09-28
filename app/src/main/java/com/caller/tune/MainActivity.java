@@ -314,14 +314,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_upgrade) {
 
         } else if (id == R.id.nav_faq) {
+            Intent intent = new Intent(MainActivity.this, FAQsActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_rate_us) {
+            final String appPackageName = getString(R.string.rate_us_app_id);
+                    //getPackageName(); // getPackageName() from Context or Activity object
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            }
 
         } else if (id == R.id.nav_info) {
             Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_invite_friends) {
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            String shareMsg = "Download Priority Contacts on Play store, "+getString(R.string.invite_friends_link);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, shareMsg);
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
 
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -7,4 +7,7 @@
         <item>Home</item>
         <item>Work</item>
     </string-array>
+    <string name="invite_friends_link">https://prioritycontacts.page.link/sZucCC7jh5vqcU2P6</string>
+    <string name="other_app_link">https://play.google.com/store/apps/details?id=com.appsuite.hasib.photocompressorandresizer</string>
+    <string name="rate_us_app_id">com.appsuite.prioritycontacts</string>
 </resources>

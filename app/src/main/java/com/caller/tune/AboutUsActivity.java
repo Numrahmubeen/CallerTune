@@ -2,6 +2,7 @@ package com.caller.tune;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AboutUsActivity extends AppCompatActivity {
-    LinearLayout fb_ll, gMail_ll;
+    private LinearLayout fb_ll, gMail_ll, goto_other_app_ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +23,27 @@ public class AboutUsActivity extends AppCompatActivity {
 
         fb_ll = findViewById(R.id.fb_ll);
         gMail_ll = findViewById(R.id.gmail_ll);
+        goto_other_app_ll = findViewById(R.id.goto_other_app_ll);
+
+        goto_other_app_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.other_app_link))));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.other_app_link))));
+                }
+            }
+        });
 
         fb_ll.setOnClickListener(v -> {
-            if (isAppInstalled()) {
-                Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
-                String facebookUrl = getFacebookPageURL(this);
-                facebookIntent.setData(Uri.parse(facebookUrl));
-                startActivity(facebookIntent);
-
-            } else {
-                Toast.makeText(getApplicationContext(), "facebook app not installing", Toast.LENGTH_SHORT).show();
+            Intent facebookAppIntent;
+            try {
+                facebookAppIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/568690480215566"));
+                startActivity(facebookAppIntent);
+            } catch (ActivityNotFoundException e) {
+                facebookAppIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/AppSuiteCo"));
+                startActivity(facebookAppIntent);
             }
         });
         gMail_ll.setOnClickListener(v -> {
@@ -57,33 +69,5 @@ public class AboutUsActivity extends AppCompatActivity {
             }
 
         });
-    }
-    public static String FACEBOOK_URL = "https://www.facebook.com/AppSuiteCo";
-    public static String FACEBOOK_PAGE_ID = "https://www.facebook.com/AppSuiteCo";
-
-    //method to get the right URL to use in the intent
-    public String getFacebookPageURL(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            int versionCode = packageManager.getPackageInfo("com.facebook.orca", 0).versionCode;
-            if (versionCode >= 3002850) { //newer versions of fb app
-                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
-            } else { //older versions of fb app
-                return "fb://page/" + FACEBOOK_PAGE_ID;
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            return FACEBOOK_URL; //normal web url
-        }
-    }
-
-
-
-    public boolean isAppInstalled() {
-        try {
-            getApplicationContext().getPackageManager().getApplicationInfo("com.facebook.katana", 0);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 }

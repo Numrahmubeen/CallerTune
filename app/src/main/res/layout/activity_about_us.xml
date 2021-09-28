@@ -73,16 +73,23 @@
         android:textSize="@dimen/_18ssp"
         android:textColor="#ff0000"
         android:text="OTHER APPS: "/>
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_150sdp"
-        android:src="@drawable/image_compressor_app_cover"/>
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/_10sdp"
-        android:textSize="@dimen/_12ssp"
-        android:textColor="#237E23"
-        android:text="REDUCE IMAGE SIZE - IMAGE COMPRESSOR"/>
+        android:id="@+id/goto_other_app_ll"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:src="@drawable/image_compressor_app_cover"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_10sdp"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="#237E23"
+            android:text="REDUCE IMAGE SIZE - IMAGE COMPRESSOR"/>
+    </LinearLayout>
+
 </LinearLayout>
