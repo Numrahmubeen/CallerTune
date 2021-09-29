@@ -64,7 +64,7 @@ public class CallActivity extends AppCompatActivity {
     private CompositeDisposable disposables = new CompositeDisposable();
     public static String number;
     private ImageView rejectCall_iv, answerCall_iv, caller_iv, hangUp_call_iv;
-    private TextView callState_tv, callerName_tv, speakerOn_tv, holdCall_tv, muteCall_tv;
+    private TextView callState_tv, callerName_tv, speakerOn_tv, holdCall_tv, muteCall_tv, callerNumber_tv;
     private Chronometer chronometer;
     private boolean isHold = false;
     private boolean isTimerOn = false;
@@ -211,6 +211,7 @@ public class CallActivity extends AppCompatActivity {
         hangUp_call_iv = findViewById(R.id.hangUp_call_iv);
         callRinging_ll = findViewById(R.id.ringing_ll);
         inCall_cv = findViewById(R.id.inCall_cv);
+        callerNumber_tv = findViewById(R.id.caller_number_tv);
     }
 
     @SuppressLint("CheckResult")
@@ -248,11 +249,13 @@ public class CallActivity extends AppCompatActivity {
         if(contact != null && contact.getName() != null)
         {
             callerName_tv.setText(contact.getName());
+            callerNumber_tv.setText(number);
             if(contact.getPhoto() != null)
                 caller_iv.setImageBitmap(contact.getPhoto());
         }
         else {
             callerName_tv.setText(number);
+            callerNumber_tv.setVisibility(View.GONE);
             caller_iv.setVisibility(View.GONE);
         }
 //        callState_tv.setText(CallStateString.asString(state).toLowerCase()+"\n"+number);
@@ -324,7 +327,6 @@ public class CallActivity extends AppCompatActivity {
         TextViewCompat.setCompoundDrawableTintList(holdCall_tv, ColorStateList.valueOf(ContextCompat.getColor(this,R.color.gray)));
         TextViewCompat.setCompoundDrawableTintList(muteCall_tv, ColorStateList.valueOf(ContextCompat.getColor(this,R.color.gray)));
     }
-
 
     public static ContactModel retrieveContactInfo(Context context, String number) {
         ContactModel contactModel = new ContactModel();

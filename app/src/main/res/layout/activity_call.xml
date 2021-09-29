@@ -40,22 +40,37 @@
 
     </RelativeLayout>
 
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_18ssp"
+        android:orientation="vertical"
         android:layout_below="@id/rl"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/caller_name_tv"
+        android:gravity="center"
+        android:id="@+id/name_or_number_ll">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_18ssp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:id="@+id/caller_name_tv"
+            android:text="Caller Name"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_18ssp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/caller_number_tv"
+            android:text="Number"/>
 
-        android:text="Caller Name or Number"/>
+    </LinearLayout>
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="@dimen/_60sdp"
         android:layout_height="@dimen/_60sdp"
-        android:layout_below="@id/caller_name_tv"
+        android:layout_below="@id/name_or_number_ll"
         android:id="@+id/caller_iv"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/_30sdp"
