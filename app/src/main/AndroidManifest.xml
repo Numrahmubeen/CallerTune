@@ -30,18 +30,18 @@
         <activity
             android:name=".CallHistoryDetailActivity"
             android:label="Call Detail"
-            android:theme="@style/Theme.Design.Light.NoActionBar" />
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".ChooseContactsActivity"
-            android:theme="@style/Theme.Design.Light.NoActionBar" />
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".CallActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+            android:theme="@style/material_no_action_bar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
