@@ -1,95 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".AboutUsActivity">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:textSize="@dimen/_16ssp"
-        android:text="AppSuite is a mobile app development company mainly focused on Android Platform"/>
-    <TextView
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:text="AppSuite is a mobile app development company mainly focused on Android Platform you can contact using following"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/black" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:textSize="@dimen/_18ssp"
-        android:textColor="#ff0000"
-        android:text="Contact Us: "/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/fb_ll"
-        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_20sdp"
         android:orientation="horizontal">
+
         <ImageView
-            android:id="@+id/icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:id="@+id/about_facebook_iv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/ic_facebook" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fb_tv"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:textColor="#0000ff"
-            android:text="AppSuite Facebook Page"
-            android:textSize="@dimen/_14ssp"
-            android:textStyle="bold" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/gmail_ll"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:orientation="horizontal">
         <ImageView
-            android:id="@+id/gmail"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:id="@+id/about_gmail_iv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_30sdp"
             android:src="@drawable/ic_gmail" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:textColor="#237E23"
-            android:text="appsuiteco@gmail.com"
-            android:textSize="@dimen/_14ssp"
-            android:textStyle="bold" />
     </LinearLayout>
-
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:textSize="@dimen/_18ssp"
-        android:textColor="#ff0000"
-        android:text="OTHER APPS: "/>
-    <LinearLayout
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:text="Other products"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/goto_other_app_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/goto_other_app_ll"
-        android:orientation="vertical">
-        <ImageView
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="@dimen/_3sdp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
-            android:src="@drawable/image_compressor_app_cover"/>
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/_10sdp"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="#237E23"
-            android:text="REDUCE IMAGE SIZE - IMAGE COMPRESSOR"/>
-    </LinearLayout>
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/image_croper_app" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_40sdp"
+                android:text="Video &amp; Image compressor - reduce size &amp; compress"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="You can reduce image size by optimizing photo quality, photo resize, convert image file format. Also, we are providing a powerful video compression feature where you can do video"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Version"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="4.0"
+                    android:textColor="@color/black" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Download size"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="Varies with device"
+                    android:textColor="@color/black" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>

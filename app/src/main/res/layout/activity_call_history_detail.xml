@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/light_gray"
-    android:layout_height="match_parent">
-    <LinearLayout android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/callHistory_back_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/callHistory_back_iv"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginLeft="@dimen/_10sdp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_arrow_back"/>
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:src="@drawable/ic_arrow_back" />
 
         <ImageView
+            android:id="@+id/callHistory_callerDp_iv"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_80sdp"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginBottom="-100dp"
             android:background="@drawable/circle_bg"
             android:backgroundTint="@color/gray"
-            android:id="@+id/callHistory_callerDp_iv"
-            android:layout_gravity="center"
-            android:layout_marginBottom="-100dp"
             android:elevation="@dimen/_15sdp"
             android:text="Log In"
-            android:textColor="@color/white"
-            android:layout_alignParentTop="true"/>
+            android:textColor="@color/white" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/_50sdp">
+            android:layout_marginTop="@dimen/_50sdp"
+            android:orientation="vertical">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view"
                 android:layout_width="match_parent"
@@ -45,341 +48,356 @@
                 android:background="@android:color/white"
                 card_view:cardCornerRadius="@dimen/_8sdp"
                 card_view:cardElevation="@dimen/_8sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/callHistory_callerName_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="Contact Name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_20ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/callHistory_callerPhone_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0300123212"
+                        android:textSize="@dimen/_20ssp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="8">
+
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:orientation="vertical"
-                            android:layout_marginTop="@dimen/_40sdp"
-                            android:gravity="center_horizontal"
-                            android:layout_height="wrap_content">
+                            android:id="@+id/callHistory_gotoMessage_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/callHistory_callerName_tv"
-                                android:layout_marginTop="@dimen/_10sdp"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:textSize="@dimen/_20ssp"
-                                android:text="Contact Name"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/callHistory_callerPhone_tv"
-                                android:textStyle="bold"
-                                android:textSize="@dimen/_20ssp"
-                                android:text="0300123212"/>
                             <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:gravity="center"
-                                android:weightSum="8"
-                                android:orientation="horizontal">
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/callHistory_gotoMessage_ll"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="@dimen/_40sdp"
+                                android:background="@drawable/circle_bg"
+                                android:gravity="center">
 
-                                    <LinearLayout
-                                        android:layout_width="@dimen/_40sdp"
-                                        android:layout_height="@dimen/_40sdp"
-                                        android:gravity="center"
-                                        android:background="@drawable/circle_bg">
-                                        <ImageView
-                                            android:layout_width="@dimen/_20sdp"
-                                            android:layout_height="@dimen/_20sdp"
-                                            app:tint="@color/white"
-                                            android:src="@drawable/ic_message"/>
-                                    </LinearLayout>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:text="Text"/>
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/callHistory_makeCall_ll"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <LinearLayout
-                                        android:layout_width="@dimen/_40sdp"
-                                        android:layout_height="@dimen/_40sdp"
-                                        android:gravity="center"
-                                        android:background="@drawable/circle_bg">
-                                        <ImageView
-                                            android:layout_width="@dimen/_20sdp"
-                                            android:layout_height="@dimen/_20sdp"
-                                            android:src="@drawable/ic_phone"/>
-                                    </LinearLayout>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:text="Call"/>
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/callHistory_addToContacts_ll"
-                                    android:gravity="center"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <LinearLayout
-                                        android:layout_width="@dimen/_40sdp"
-                                        android:layout_height="@dimen/_40sdp"
-                                        android:gravity="center"
-                                        android:background="@drawable/circle_bg">
-                                        <ImageView
-                                            android:layout_width="@dimen/_30sdp"
-                                            android:layout_height="@dimen/_30sdp"
-                                            android:src="@drawable/ic_person_add"/>
-                                    </LinearLayout>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:text="Add"/>
-                                </LinearLayout>
-                                <!--        <LinearLayout-->
-                                <!--            android:layout_width="wrap_content"-->
-                                <!--            android:layout_height="wrap_content"-->
-                                <!--            android:layout_weight="1"-->
-                                <!--            android:orientation="vertical">-->
-
-                                <!--            <LinearLayout-->
-                                <!--                android:layout_width="@dimen/_40sdp"-->
-                                <!--                android:layout_height="@dimen/_40sdp"-->
-                                <!--                android:gravity="center"-->
-                                <!--                android:background="@drawable/circle_bg">-->
-                                <!--                <ImageView-->
-                                <!--                    android:layout_width="@dimen/_20sdp"-->
-                                <!--                    android:layout_height="@dimen/_20sdp"-->
-                                <!--                    android:src="@drawable/ic_message"/>-->
-                                <!--            </LinearLayout>-->
-                                <!--            <TextView-->
-                                <!--                android:layout_width="wrap_content"-->
-                                <!--                android:layout_height="wrap_content"-->
-                                <!--                android:layout_gravity="center"-->
-                                <!--                android:text="Text"/>-->
-                                <!--        </LinearLayout>-->
-
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:src="@drawable/ic_message"
+                                    app:tint="@color/white" />
                             </LinearLayout>
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:id="@+id/callHistory_gotoContactDetails_view"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:layout_marginRight="@dimen/_30sdp"
-                                android:layout_marginLeft="@dimen/_30sdp"
-                                android:background="@color/light_gray"/>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/callHistory_gotoContactDetails_tv"
-                                android:textSize="@dimen/_14ssp"
-                                android:padding="@dimen/_10sdp"
-                                android:text="View Contact Details"/>
+                                android:layout_gravity="center"
+                                android:text="Text" />
                         </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+
+                        <LinearLayout
+                            android:id="@+id/callHistory_makeCall_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="@dimen/_40sdp"
+                                android:background="@drawable/circle_bg"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:src="@drawable/ic_phone" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Call" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/callHistory_addToContacts_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="@dimen/_40sdp"
+                                android:layout_height="@dimen/_40sdp"
+                                android:background="@drawable/circle_bg"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_30sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:src="@drawable/ic_person_add" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Add" />
+                        </LinearLayout>
+                        <!--        <LinearLayout-->
+                        <!--            android:layout_width="wrap_content"-->
+                        <!--            android:layout_height="wrap_content"-->
+                        <!--            android:layout_weight="1"-->
+                        <!--            android:orientation="vertical">-->
+
+                        <!--            <LinearLayout-->
+                        <!--                android:layout_width="@dimen/_40sdp"-->
+                        <!--                android:layout_height="@dimen/_40sdp"-->
+                        <!--                android:gravity="center"-->
+                        <!--                android:background="@drawable/circle_bg">-->
+                        <!--                <ImageView-->
+                        <!--                    android:layout_width="@dimen/_20sdp"-->
+                        <!--                    android:layout_height="@dimen/_20sdp"-->
+                        <!--                    android:src="@drawable/ic_message"/>-->
+                        <!--            </LinearLayout>-->
+                        <!--            <TextView-->
+                        <!--                android:layout_width="wrap_content"-->
+                        <!--                android:layout_height="wrap_content"-->
+                        <!--                android:layout_gravity="center"-->
+                        <!--                android:text="Text"/>-->
+                        <!--        </LinearLayout>-->
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/callHistory_gotoContactDetails_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginRight="@dimen/_30sdp"
+                        android:background="@color/light_gray" />
+
+                    <TextView
+                        android:id="@+id/callHistory_gotoContactDetails_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_10sdp"
+                        android:text="View Contact Details"
+                        android:textSize="@dimen/_14ssp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_14ssp"
             android:layout_margin="@dimen/_10sdp"
-            android:textStyle="bold"
-            android:text="History"/>
+            android:text="History"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             card_view:cardCornerRadius="@dimen/_10sdp">
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/callHistory_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/callHistory_rv"
-                tools:listitem="@layout/item_recent_calls_rv"/>
+                tools:listitem="@layout/item_recent_calls_rv" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:background="@color/gray"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:orientation="vertical"-->
-<!--    tools:context=".CallHistoryDetailActivity">-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout><!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:background="@color/gray"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:orientation="vertical"-->
+    <!--    tools:context=".CallHistoryDetailActivity">-->
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        -->
-<!--        >-->
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:layout_width="match_parent"-->
-<!--            app:cardCornerRadius="@dimen/_10sdp"-->
-<!--            android:layout_margin="@dimen/_10sdp"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            app:cardElevation="@dimen/_4sdp"-->
-<!--            app:cardUseCompatPadding="false"-->
-<!--            app:cardBackgroundColor="@color/white"-->
-<!--            android:layout_height="wrap_content">-->
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        -->
+    <!--        >-->
+    <!--        <androidx.cardview.widget.CardView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            app:cardCornerRadius="@dimen/_10sdp"-->
+    <!--            android:layout_margin="@dimen/_10sdp"-->
+    <!--            android:layout_alignParentTop="true"-->
+    <!--            app:cardElevation="@dimen/_4sdp"-->
+    <!--            app:cardUseCompatPadding="false"-->
+    <!--            app:cardBackgroundColor="@color/white"-->
+    <!--            android:layout_height="wrap_content">-->
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:orientation="vertical"-->
-<!--                android:gravity="center_horizontal"-->
-<!--                android:layout_height="wrap_content">-->
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:orientation="vertical"-->
+    <!--                android:gravity="center_horizontal"-->
+    <!--                android:layout_height="wrap_content">-->
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/_10sdp"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:textSize="@dimen/_20ssp"-->
-<!--                    android:text="Contact Name"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:textSize="@dimen/_20ssp"-->
-<!--                    android:text="0300123212"/>-->
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center"-->
-<!--                    android:weightSum="8"-->
-<!--                    android:orientation="horizontal">-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:gravity="center"-->
-<!--                        android:orientation="vertical">-->
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_marginTop="@dimen/_10sdp"-->
+    <!--                    android:textColor="@color/black"-->
+    <!--                    android:textStyle="bold"-->
+    <!--                    android:textSize="@dimen/_20ssp"-->
+    <!--                    android:text="Contact Name"/>-->
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:textStyle="bold"-->
+    <!--                    android:textSize="@dimen/_20ssp"-->
+    <!--                    android:text="0300123212"/>-->
+    <!--                <LinearLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:gravity="center"-->
+    <!--                    android:weightSum="8"-->
+    <!--                    android:orientation="horizontal">-->
+    <!--                    <LinearLayout-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_weight="1"-->
+    <!--                        android:gravity="center"-->
+    <!--                        android:orientation="vertical">-->
 
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="@dimen/_40sdp"-->
-<!--                            android:layout_height="@dimen/_40sdp"-->
-<!--                            android:gravity="center"-->
-<!--                            android:background="@drawable/circle_bg">-->
-<!--                            <ImageView-->
-<!--                                android:layout_width="@dimen/_20sdp"-->
-<!--                                android:layout_height="@dimen/_20sdp"-->
-<!--                                app:tint="@color/white"-->
-<!--                                android:src="@drawable/ic_message"/>-->
-<!--                        </LinearLayout>-->
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:text="Text"/>-->
-<!--                    </LinearLayout>-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:gravity="center"-->
-<!--                        android:orientation="vertical">-->
+    <!--                        <LinearLayout-->
+    <!--                            android:layout_width="@dimen/_40sdp"-->
+    <!--                            android:layout_height="@dimen/_40sdp"-->
+    <!--                            android:gravity="center"-->
+    <!--                            android:background="@drawable/circle_bg">-->
+    <!--                            <ImageView-->
+    <!--                                android:layout_width="@dimen/_20sdp"-->
+    <!--                                android:layout_height="@dimen/_20sdp"-->
+    <!--                                app:tint="@color/white"-->
+    <!--                                android:src="@drawable/ic_message"/>-->
+    <!--                        </LinearLayout>-->
+    <!--                        <TextView-->
+    <!--                            android:layout_width="wrap_content"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:layout_gravity="center"-->
+    <!--                            android:text="Text"/>-->
+    <!--                    </LinearLayout>-->
+    <!--                    <LinearLayout-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_weight="1"-->
+    <!--                        android:gravity="center"-->
+    <!--                        android:orientation="vertical">-->
 
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="@dimen/_40sdp"-->
-<!--                            android:layout_height="@dimen/_40sdp"-->
-<!--                            android:gravity="center"-->
-<!--                            android:background="@drawable/circle_bg">-->
-<!--                            <ImageView-->
-<!--                                android:layout_width="@dimen/_20sdp"-->
-<!--                                android:layout_height="@dimen/_20sdp"-->
-<!--                                android:src="@drawable/ic_phone"/>-->
-<!--                        </LinearLayout>-->
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:text="Call"/>-->
-<!--                    </LinearLayout>-->
-<!--                    &lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:layout_weight="1"&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:orientation="vertical">&ndash;&gt;-->
+    <!--                        <LinearLayout-->
+    <!--                            android:layout_width="@dimen/_40sdp"-->
+    <!--                            android:layout_height="@dimen/_40sdp"-->
+    <!--                            android:gravity="center"-->
+    <!--                            android:background="@drawable/circle_bg">-->
+    <!--                            <ImageView-->
+    <!--                                android:layout_width="@dimen/_20sdp"-->
+    <!--                                android:layout_height="@dimen/_20sdp"-->
+    <!--                                android:src="@drawable/ic_phone"/>-->
+    <!--                        </LinearLayout>-->
+    <!--                        <TextView-->
+    <!--                            android:layout_width="wrap_content"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:layout_gravity="center"-->
+    <!--                            android:text="Call"/>-->
+    <!--                    </LinearLayout>-->
+    <!--                    &lt;!&ndash;        <LinearLayout&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:layout_weight="1"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:orientation="vertical">&ndash;&gt;-->
 
-<!--                    &lt;!&ndash;            <LinearLayout&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_width="@dimen/_40sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_height="@dimen/_40sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:background="@drawable/circle_bg">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                <ImageView&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    android:layout_width="@dimen/_20sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    android:layout_height="@dimen/_20sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    android:src="@drawable/ic_message"/>&ndash;&gt;-->
-<!--                    &lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
-<!--                    &lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:text="Text"/>&ndash;&gt;-->
-<!--                    &lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
-<!--                    &lt;!&ndash;        <LinearLayout&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:layout_weight="1"&ndash;&gt;-->
-<!--                    &lt;!&ndash;            android:orientation="vertical">&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            <LinearLayout&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_width="@dimen/_40sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_height="@dimen/_40sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:background="@drawable/circle_bg">&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                <ImageView&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    android:layout_width="@dimen/_20sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    android:layout_height="@dimen/_20sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    android:src="@drawable/ic_message"/>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            <TextView&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:text="Text"/>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;        <LinearLayout&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:layout_weight="1"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            android:orientation="vertical">&ndash;&gt;-->
 
-<!--                    &lt;!&ndash;            <LinearLayout&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_width="@dimen/_40sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_height="@dimen/_40sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:background="@drawable/circle_bg">&ndash;&gt;-->
-<!--                    &lt;!&ndash;                <ImageView&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    android:layout_width="@dimen/_20sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    android:layout_height="@dimen/_20sdp"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    android:src="@drawable/ic_message"/>&ndash;&gt;-->
-<!--                    &lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
-<!--                    &lt;!&ndash;            <TextView&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
-<!--                    &lt;!&ndash;                android:text="Text"/>&ndash;&gt;-->
-<!--                    &lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            <LinearLayout&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_width="@dimen/_40sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_height="@dimen/_40sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:background="@drawable/circle_bg">&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                <ImageView&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    android:layout_width="@dimen/_20sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    android:layout_height="@dimen/_20sdp"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                    android:src="@drawable/ic_message"/>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;            <TextView&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
+    <!--                    &lt;!&ndash;                android:text="Text"/>&ndash;&gt;-->
+    <!--                    &lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
 
-<!--                </LinearLayout>-->
-<!--                <View-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="1dp"-->
-<!--                    android:layout_marginTop="@dimen/_15sdp"-->
-<!--                    android:layout_marginRight="@dimen/_30sdp"-->
-<!--                    android:layout_marginLeft="@dimen/_30sdp"-->
-<!--                    android:background="@color/light_gray"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="@dimen/_14ssp"-->
-<!--                    android:padding="@dimen/_10sdp"-->
-<!--                    android:text="View Contact Details"/>-->
-<!--            </LinearLayout>-->
-<!--        </androidx.cardview.widget.CardView>-->
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:layout_width="@dimen/_80sdp"-->
-<!--            android:layout_height="@dimen/_80sdp"-->
-<!--            android:src="@drawable/ic_launcher_background"-->
-<!--            android:layout_marginTop="75dp"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:elevation="8dp"/>-->
-<!--    </RelativeLayout>-->
+    <!--                </LinearLayout>-->
+    <!--                <View-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="1dp"-->
+    <!--                    android:layout_marginTop="@dimen/_15sdp"-->
+    <!--                    android:layout_marginRight="@dimen/_30sdp"-->
+    <!--                    android:layout_marginLeft="@dimen/_30sdp"-->
+    <!--                    android:background="@color/light_gray"/>-->
+    <!--                <TextView-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:textSize="@dimen/_14ssp"-->
+    <!--                    android:padding="@dimen/_10sdp"-->
+    <!--                    android:text="View Contact Details"/>-->
+    <!--            </LinearLayout>-->
+    <!--        </androidx.cardview.widget.CardView>-->
+    <!--        <de.hdodenhof.circleimageview.CircleImageView-->
+    <!--            android:layout_width="@dimen/_80sdp"-->
+    <!--            android:layout_height="@dimen/_80sdp"-->
+    <!--            android:src="@drawable/ic_launcher_background"-->
+    <!--            android:layout_marginTop="75dp"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:elevation="8dp"/>-->
+    <!--    </RelativeLayout>-->
 
 
-<!--</LinearLayout>-->
+    <!--</LinearLayout>-->

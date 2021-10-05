@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_add_contact_manually"
         android:orderInCategory="100"
-        android:title="Add Contact Manually"
+        android:title="Add contact manually"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_settings"
@@ -14,16 +14,16 @@
     <item
         android:id="@+id/ring_all"
         android:orderInCategory="100"
-        android:title="Ring All"
+        android:title="Ring all"
         app:showAsAction="never" />
     <item
         android:id="@+id/vibrate_all"
         android:orderInCategory="100"
-        android:title="Vibrate All"
+        android:title="Vibrate all"
         app:showAsAction="never" />
     <item
         android:id="@+id/mute_all"
         android:orderInCategory="100"
-        android:title="Mute All"
+        android:title="Mute all"
         app:showAsAction="never" />
 </menu>

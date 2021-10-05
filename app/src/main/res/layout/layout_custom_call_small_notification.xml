@@ -1,53 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/_10sdp"
-    android:layout_marginRight="@dimen/_10sdp">
-    <TextView
-        android:id="@+id/notification_small_title_tv"
-        style="@style/TextAppearance.Compat.Notification.Title"
-        android:layout_alignParentTop="true"
-        android:textColor="@color/green_noti_text"
-        android:ellipsize="end"
-        android:maxLines="1"
+    android:layout_marginRight="@dimen/_10sdp"
+    android:paddingVertical="@dimen/_10sdp">
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ongoing Call" />
-    <TextView
-        android:id="@+id/notification_small_incoming_caller"
-        style="@style/TextAppearance.Compat.Notification.Media"
-        android:layout_below="@+id/notification_small_title_tv"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_14ssp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:maxWidth="@dimen/_180sdp"
-        android:layout_height="wrap_content"
-        android:text="Mom Jazz" />
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/notification_small_accept_call_iv"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/notification_small_title_tv"
+            style="@style/TextAppearance.Compat.Notification.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Ongoing Call"
+            android:textColor="@color/green_noti_text" />
+
+        <TextView
+            android:id="@+id/notification_small_incoming_caller"
+            style="@style/TextAppearance.Compat.Notification.Media"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/notification_small_title_tv"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Mom Jazz"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/notification_small_reject_call_iv"
         android:id="@+id/notification_small_accept_call_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/_10sdp"
+        android:layout_toLeftOf="@+id/notification_small_reject_call_iv"
         android:background="@drawable/circle_bg"
-        android:padding="@dimen/_10sdp"
         android:backgroundTint="@color/green_noti_text"
-        android:src="@drawable/ic_phone"/>
+        android:padding="@dimen/_10sdp"
+        android:src="@drawable/ic_phone" />
+
     <ImageView
+        android:id="@+id/notification_small_reject_call_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:id="@+id/notification_small_reject_call_iv"
         android:layout_gravity="right"
         android:background="@drawable/circle_bg"
-        android:padding="@dimen/_10sdp"
         android:backgroundTint="#ff0000"
-        android:src="@drawable/ic_end_call_white_"/>
+        android:padding="@dimen/_10sdp"
+        android:src="@drawable/ic_end_call_white_" />
 
 </RelativeLayout>

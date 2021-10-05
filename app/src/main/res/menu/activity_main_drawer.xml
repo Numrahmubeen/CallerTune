@@ -15,11 +15,11 @@
         <item
             android:id="@+id/nav_schedule_activate"
             android:icon="@drawable/ic_schedule"
-            android:title="Schedule Activate" />
+            android:title="Schedule activate" />
         <item
             android:id="@+id/nav_upgrade"
             android:icon="@drawable/ic_money"
-            android:title="Upgrade to Premium" />
+            android:title="Upgrade to premium" />
         <item
             android:id="@+id/nav_faq"
             android:icon="@drawable/ic_contact_support"
@@ -31,15 +31,15 @@
             <item
                 android:id="@+id/nav_rate_us"
                 android:icon="@drawable/ic_thumb_up"
-                android:title="Rate Us" />
+                android:title="Rate us" />
             <item
                 android:id="@+id/nav_info"
                 android:icon="@drawable/ic_info"
-                android:title="Developer &amp; Other Apps" />
+                android:title="Developer &amp; other apps" />
             <item
                 android:id="@+id/nav_invite_friends"
                 android:icon="@drawable/ic_share"
-                android:title="Invite Friends" />
+                android:title="Invite friends" />
 
         </menu>
     </item>

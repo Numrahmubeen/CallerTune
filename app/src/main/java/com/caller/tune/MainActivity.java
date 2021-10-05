@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ActivityResultContracts.RequestMultiplePermissions requestMultiplePermissionsContract;
     private ActivityResultLauncher<String[]> multiplePermissionActivityResultLauncher;
+
     final String[] PERMISSIONS = {
             Manifest.permission.CALL_PHONE,
             Manifest.permission.READ_PHONE_STATE,

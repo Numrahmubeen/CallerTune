@@ -13,11 +13,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
         <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/yantramanav_regular</item>
     </style>
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="android:fontFamily">@font/yantramanav_regular</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
     </style>
 
@@ -25,14 +27,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="android:fontFamily">@font/yantramanav_regular</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
     </style>
     <style name="DialpadNumberStyle">
         <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@font/yantramanav_regular</item>
         <item name="android:textSize">@dimen/dialpad_text_size</item>
     </style>
     <style name="DialpadLetterStyle">
         <item name="android:textSize">@dimen/smaller_text_size</item>
+        <item name="android:fontFamily">@font/yantramanav_regular</item>
         <item name="android:alpha">0.8</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -41,6 +46,7 @@
     <style name="ToolBarTheme.ToolBarStyle"    parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/yantramanav_regular</item>
         <item name="android:textColorPrimaryInverse">@color/white</item>
     </style>
 
