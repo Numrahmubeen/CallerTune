@@ -55,6 +55,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import me.mutasem.slidetoanswer.SwipeToAnswerView;
 
 import static com.caller.tune.CallService.r;
 import static com.caller.tune.OngoingCall.state;
@@ -63,7 +64,8 @@ public class CallActivity extends AppCompatActivity {
 
     private CompositeDisposable disposables = new CompositeDisposable();
     public static String number;
-    private ImageView rejectCall_iv, answerCall_iv, caller_iv, hangUp_call_iv;
+   private SwipeToAnswerView rejectCall_iv, answerCall_iv;
+    private ImageView  caller_iv, hangUp_call_iv;
     private TextView callState_tv, callerName_tv, speakerOn_tv, holdCall_tv, muteCall_tv, callerNumber_tv;
     private Chronometer chronometer;
     private boolean isHold = false;
@@ -119,9 +121,17 @@ public class CallActivity extends AppCompatActivity {
     }
 
     private void clickListeners() {
-        answerCall_iv.setOnClickListener(v -> OngoingCall.answer());
+        answerCall_iv.setSlideListner(() ->
+        {
+            OngoingCall.answer();
+            rejectCall_iv.stopAnimation();
+        }
+        );
 
-        rejectCall_iv.setOnClickListener(v -> OngoingCall.hangup());
+        rejectCall_iv.setSlideListner(() -> {
+            OngoingCall.hangup();
+            answerCall_iv.stopAnimation();
+        });
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setMode(AudioManager.MODE_IN_CALL);
         muteCall_tv.setOnClickListener(v -> {

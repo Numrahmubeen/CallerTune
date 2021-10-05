@@ -49,4 +49,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'
 
+    implementation 'com.github.mutasemhajhasan:SlideToAnswerView:1.0.0'
+
 }
