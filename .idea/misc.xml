@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/bg_call_activity.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/circle_bg.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/circle_bg2.xml" value="0.25833333333333336" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_about_us.xml" value="0.2421875" />
-        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_call.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_call.xml" value="0.264" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_call_history_detail.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_choose_contacts.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_faqs.xml" value="0.2421875" />

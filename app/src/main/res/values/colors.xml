@@ -21,5 +21,9 @@
     <color name="gray_call">#807B7B</color>
     <color name="green_noti_text">#328735</color>
     <color name="faqs_title_bg">#3A7C61</color>
+    
+    <color name="call_start_color">#7092B9</color>
+    <color name="call_center_color">#5685BC</color>
+    <color name="call_bottom_color">#105AB3</color>
 
 </resources>
