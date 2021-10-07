@@ -9,21 +9,27 @@
 
     <EditText
         android:id="@+id/searchView"
-        android:padding="@dimen/_10sdp"
-        android:singleLine="true"
-        android:background="@drawable/et_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
         android:layout_alignParentTop="true"
-        android:hint="Search Contacts Here" />
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/et_bg"
+        android:drawableEnd="@drawable/ic_search"
+        android:drawableTint="@color/light_gray"
+        android:hint="Search contact here"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:paddingVertical="@dimen/_10sdp"
+        android:singleLine="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragPhone_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/searchView"
         android:layout_above="@id/dialPad_cl"
+        android:layout_below="@id/searchView"
         tools:listitem="@layout/item_contacts_rv" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +45,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_margin"
+            android:background="@null"
             android:gravity="center"
+            android:paddingVertical="@dimen/_10sdp"
             android:textSize="@dimen/dialpad_text_size"
             app:layout_constraintBottom_toTopOf="@+id/dialpad_wrapper"
             app:layout_constraintEnd_toStartOf="@+id/btnDel"
@@ -54,6 +62,7 @@
             android:paddingStart="@dimen/activity_margin"
             android:paddingEnd="@dimen/activity_margin"
             android:src="@drawable/ic_cross"
+            android:tint="@color/gray"
             app:layout_constraintBottom_toBottomOf="@+id/screen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/screen" />
@@ -71,7 +80,6 @@
             android:layout_height="@dimen/dialpad_button_size"
             android:layout_marginBottom="@dimen/activity_margin"
             android:background="@drawable/circle_bg"
-            android:elevation="@dimen/medium_margin"
             android:padding="10dp"
             android:src="@drawable/ic_phone"
             app:layout_constraintBottom_toBottomOf="parent"

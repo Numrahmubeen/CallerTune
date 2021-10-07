@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/faqs_title_bg"
     android:orientation="vertical">
+
     <TextView
+        android:id="@+id/item_faq_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:id="@+id/item_faq_title_tv"
-        android:textSize="@dimen/_14ssp"
         android:layout_margin="@dimen/_10sdp"
-        android:paddingLeft="@dimen/_20sdp"
-        android:paddingRight="@dimen/_20sdp"
-        android:textColor="@color/white"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp"
+        android:text="Faq title"
         android:textAlignment="textStart"
-        android:text="Faq tile"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 </LinearLayout>

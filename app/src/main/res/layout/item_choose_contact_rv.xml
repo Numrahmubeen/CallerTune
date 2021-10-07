@@ -1,60 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/contact_rl"
     android:layout_width="match_parent"
-    android:layout_marginTop="@dimen/_5sdp"
-    android:layout_marginBottom="@dimen/_5sdp"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:padding="@dimen/_8sdp">
+
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/contact_civ"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
-        android:id="@+id/contact_civ"
-        android:src="@drawable/ic_person"
-        android:backgroundTint="@color/gray"
-        android:background="@drawable/circle_bg" />
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:background="@drawable/circle_bg"
+        android:src="@drawable/ic_person" />
+
+
     <LinearLayout
+        android:id="@+id/ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ll"
-        android:paddingBottom="@dimen/_10sdp"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/_8sdp"
-        android:layout_toRightOf="@+id/contact_civ">
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_toStartOf="@id/checkbox"
+        android:layout_toEndOf="@id/contact_civ"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="@dimen/_200sdp"
-            android:ellipsize="end"
-            android:maxLines="1"
             android:id="@+id/contact_name_tv"
-            android:layout_toRightOf="@id/contact_civ"
-            android:textSize="@dimen/_16ssp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:text="Contact Name"/>
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="@dimen/_200sdp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="Contact Name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black" />
+
+        <TextView
             android:id="@+id/contact_number_tv"
-            android:layout_toRightOf="@id/contact_civ"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="@color/gray"
-            android:text="Contact Number"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Contact Number"
+            android:textColor="@color/gray" />
 
     </LinearLayout>
+
     <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkbox"
-        android:layout_alignParentRight="true" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_alignBottom="@+id/ll"
-        android:background="@color/gray"/>
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

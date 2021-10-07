@@ -12,11 +12,13 @@
     <color name="pink">#E91E63</color>
     <color name="gray">#807B7B</color>
     <color name="light_gray">#CAC4C4</color>
+    <color name="light_gray_100">#77B4B4B4</color>
     <color name="sim_one">#FF0F0F67</color>
     <color name="sim_two">#033303</color>
     <color name="missed_call">#A10D0D</color>
     <color name="outgoing_call">#FF00FF00</color>
     <color name="green">#FF00FF00</color>
+    <color name="color_green_dark">#328735</color>
     <color name="receive_call">#FF0000FF</color>
     <color name="gray_call">#807B7B</color>
     <color name="green_noti_text">#328735</color>

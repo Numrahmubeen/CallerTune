@@ -6,15 +6,34 @@
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/bg_call_activity.xml" value="0.25833333333333336" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/circle_bg.xml" value="0.25833333333333336" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/circle_bg2.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/circle_bg_green.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/et_bg.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/ic_attend_call.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/ic_call_outgoing.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/ic_call_recieved.xml" value="0.25833333333333336" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/drawable/ic_person.xml" value="0.25833333333333336" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_about_us.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_call.xml" value="0.264" />
-        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_call_history_detail.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_call_history_detail.xml" value="0.264" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_choose_contacts.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_faqs.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/activity_main.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/app_bar_main.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/content_main.xml" value="0.2421875" />
-        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/dialog_add_number.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/dialog_add_number.xml" value="0.264" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/dialog_select_sim.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/dialpad.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/fragment_phone.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/fragment_priority.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/fragment_recent_calls.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/item_choose_contact_rv.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/item_contacts_rv.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/item_faqs_title.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/item_header_recent_call_rv.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/item_priority_contact_rv.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/item_recent_calls_rv.xml" value="0.2421875" />
+        <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/items_faqs_ans.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/layout_custom_call_notification.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/layout_custom_call_small_notification.xml" value="0.2421875" />
         <entry key="..\:/Professional Softwares/Android/other/Priority contacts/app/src/main/res/layout/nav_header_main.xml" value="0.2421875" />

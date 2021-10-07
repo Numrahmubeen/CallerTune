@@ -1,66 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_marginLeft="@dimen/_15sdp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_15sdp"
     android:layout_marginTop="@dimen/_10sdp"
-    android:layout_marginRight="@dimen/_10sdp"
-    android:layout_marginBottom="@dimen/_20sdp">
+    android:layout_marginEnd="@dimen/_10sdp"
+    android:layout_marginBottom="@dimen/_20sdp"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Number"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/_14ssp"
-        />
+        android:text="Add new user"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
-    <EditText
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
-        android:hint="Enter Number"
-        android:inputType="number"
-        android:textColor="@color/gray"
-        android:id="@+id/number_et"/>
+        android:text="Phone number" />
+
     <EditText
+        android:id="@+id/number_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Name"
-        android:textColor="@color/gray"
-        android:id="@+id/name_et"/>
+        android:layout_marginTop="@dimen/_3sdp"
+        android:background="@drawable/et_bg"
+        android:hint="Enter phone number"
+        android:inputType="number"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:paddingVertical="@dimen/_10sdp"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
+        android:text="Name" />
+
+    <EditText
+        android:id="@+id/name_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/et_bg"
+        android:hint="Enter person name"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:paddingVertical="@dimen/_10sdp"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_3sdp"
+        android:text="Number type" />
+
     <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/numberTyp_sp"
-        android:entries="@array/number_type"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/et_bg"
+        android:entries="@array/number_type"
+        android:paddingVertical="@dimen/_10sdp" />
+
     <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/shouldAddToPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/shouldAddToPhone"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="also add to phone contact"
         android:textColor="@color/gray" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_gravity="end"
         android:layout_marginRight="@dimen/_20sdp"
-        android:layout_gravity="right">
+        android:orientation="horizontal">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/cancel_tv"
-            android:text="CANCEL"
-            android:textColor="@color/colorPrimary"/>
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:text="CANCEL"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/pink"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/add_tv"
-            android:layout_marginLeft="@dimen/_30sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:padding="@dimen/_10sdp"
             android:text="ADD"
-            android:textColor="@color/colorPrimary"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

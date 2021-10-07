@@ -1,57 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_margin="@dimen/_5sdp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_recent_calls_rv"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="@dimen/_15sdp"
-        android:layout_height="@dimen/_15sdp"
-        android:id="@+id/callType_iv"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_call_recieved"/>
-    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_8sdp">
+
+    <RelativeLayout
+        android:id="@+id/callType_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="@dimen/_200sdp"
-        android:id="@+id/caller_tv"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp"
-        android:layout_marginLeft="@dimen/_10ssp"
-        android:layout_toRightOf="@+id/callType_iv"
-        android:text="Caller Name"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:id="@+id/ll"
-        android:orientation="vertical"
-        android:layout_marginRight="@dimen/_20sdp"
-        android:layout_height="wrap_content">
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_5sdp">
+
         <ImageView
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"
-            android:visibility="gone"
-            android:id="@+id/callSim_iv"
-            android:layout_gravity="right" />
+            android:id="@+id/callType_iv"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:src="@drawable/ic_call_recieved" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15ssp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_toEndOf="@id/callType_rl"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/callTime_tv"
+            android:id="@+id/caller_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4:38 am"
-            android:textColor="@color/gray" />
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Caller Name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/callSim_iv"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_gravity="left"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/callTime_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4:38 am"
+                android:textColor="@color/gray" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_below="@+id/ll"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@color/light_gray_100" />
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_marginLeft="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_below="@+id/ll"
-        android:background="@color/light_gray"/>
 
 </RelativeLayout>

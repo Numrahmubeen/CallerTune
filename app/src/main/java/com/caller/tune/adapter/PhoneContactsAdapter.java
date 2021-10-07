@@ -27,14 +27,15 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PhoneContactsAdapter extends RecyclerView.Adapter  {
+public class PhoneContactsAdapter extends RecyclerView.Adapter {
 
     private List<ContactModel> contactsList;
     private List<ContactModel> listSearch;
     private Context context;
+
     public PhoneContactsAdapter(Context context, OnItemClickListener listener) {
         this.context = context;
-        listSearch =new ArrayList<>();
+        listSearch = new ArrayList<>();
         contactsList = new ArrayList<>();
         this.listener = listener;
     }
@@ -42,6 +43,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
     public interface OnItemClickListener {
         void onItemClick(ContactModel item);
     }
+
     public void setItems(ArrayList<ContactModel> items) {
         if (items != null) {
             contactsList = items;
@@ -49,8 +51,8 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
             notifyDataSetChanged();
         }
     }
-    private OnItemClickListener listener;
 
+    private OnItemClickListener listener;
 
 
     @Override
@@ -68,7 +70,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
         holder.contactName.setText(result.getName());
 
         String str = result.getMobileNumber().replaceAll("\\s", "");
-        str = str.replaceAll("-","");
+        str = str.replaceAll("-", "");
         holder.contactNumber.setText(str);
         holder.bind(result);
 
@@ -78,14 +80,15 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
     public int getItemCount() {
         return contactsList.size();
     }
+
     public void filter(String text) {
         contactsList.clear();
-        if(text.isEmpty()){
+        if (text.isEmpty()) {
             contactsList.addAll(listSearch);
-        } else{
+        } else {
             text = text.toLowerCase().replaceAll("\\s", "");
-            for(ContactModel item: listSearch){
-                if(item.getName().toLowerCase().replaceAll("\\s", "").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\s", "").contains(text)){
+            for (ContactModel item : listSearch) {
+                if (item.getName().toLowerCase().replaceAll("\\s", "").contains(text) || item.getMobileNumber().toLowerCase().replaceAll("\\s", "").contains(text)) {
                     contactsList.add(item);
                 }
             }
@@ -109,7 +112,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
 
         TextView contactName, contactNumber;
         CircleImageView civ;
-        LinearLayout relativeLayout;
+        RelativeLayout relativeLayout;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
@@ -119,8 +122,8 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
             contactNumber = itemView.findViewById(R.id.contact_number_tv);
             relativeLayout = itemView.findViewById(R.id.contact_rl);
         }
-        public void bind(final ContactModel contact)
-        {
+
+        public void bind(final ContactModel contact) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,7 +131,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
 
                 }
             });
-            if(contact.getPhoto()!=null){
+            if (contact.getPhoto() != null) {
 
                 Glide.with(context).asBitmap().load(contact.getPhoto()).centerCrop().into(new BitmapImageViewTarget(civ) {
                     @Override
@@ -139,8 +142,7 @@ public class PhoneContactsAdapter extends RecyclerView.Adapter  {
                         civ.setImageDrawable(circularBitmapDrawable);
                     }
                 });
-            }
-            else {
+            } else {
                 Glide.with(context).asBitmap().load(R.drawable.ic_person).centerCrop().into(new BitmapImageViewTarget(civ) {
                     @Override
                     protected void setResource(Bitmap resource) {
