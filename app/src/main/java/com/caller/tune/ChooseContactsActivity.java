@@ -128,55 +128,47 @@ public class ChooseContactsActivity extends AppCompatActivity{
         TextView cancel_tv = dialog.findViewById(R.id.cancel_tv);
         TextView add_tv = dialog.findViewById(R.id.add_tv);
 
-        cancel_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        add_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(nameEt.getText().length()>0 && numberEt.getText().length()>0)
-                {
-                    MyDbHandler db = new MyDbHandler(context);
+        cancel_tv.setOnClickListener(v -> dialog.dismiss());
+        add_tv.setOnClickListener(v -> {
+            if(nameEt.getText().length()>0 && numberEt.getText().length()>0)
+            {
+                MyDbHandler db = new MyDbHandler(context);
 
-                    ContactModel contact = new ContactModel();
-                    contact.setId(numberEt.getText().toString()+System.currentTimeMillis());
-                    contact.setName(nameEt.getText().toString());
-                    contact.setMobileNumber(numberEt.getText().toString());
-                    contact.setPhotoUri(null);
-                    contact.setCallRingMode(Params.AM_RING_MODE);
-                    contact.setMsgRingMode(Params.AM_RING_MODE);
-                    if(shouldAddToContacts.isChecked()){
-                        if (ContextCompat.checkSelfPermission(context, WRITE_CONTACTS) != PERMISSION_GRANTED) {
-                            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, WRITE_CONTACTS)) {
-                                ActivityCompat.requestPermissions((Activity) context, new String[]{WRITE_CONTACTS}, 11);
-                            } else {
-                                ActivityCompat.requestPermissions((Activity) context, new String[]{WRITE_CONTACTS}, 11);
-                            }
-                        }
-                        else {
-                            long cId = Params.addContact(nameEt.getText().toString(),numberEt.getText().toString(),spinner.getSelectedItem().toString(),context);
-                            contact.setId(String.valueOf(cId));
-                            db.addContact(contact);
-                            Toast.makeText(context, "New Contact Successfully Saved!", Toast.LENGTH_SHORT).show();
+                ContactModel contact = new ContactModel();
+                contact.setId(numberEt.getText().toString()+System.currentTimeMillis());
+                contact.setName(nameEt.getText().toString());
+                contact.setMobileNumber(numberEt.getText().toString());
+                contact.setPhotoUri(null);
+                contact.setCallRingMode(Params.AM_RING_MODE);
+                contact.setMsgRingMode(Params.AM_RING_MODE);
+                if(shouldAddToContacts.isChecked()){
+                    if (ContextCompat.checkSelfPermission(context, WRITE_CONTACTS) != PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, WRITE_CONTACTS)) {
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{WRITE_CONTACTS}, 11);
+                        } else {
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{WRITE_CONTACTS}, 11);
                         }
                     }
                     else {
+                        long cId = Params.addContact(nameEt.getText().toString(),numberEt.getText().toString(),spinner.getSelectedItem().toString(),context);
+                        contact.setId(String.valueOf(cId));
                         db.addContact(contact);
-                        Toast.makeText(context, "Contact Successfully Saved as Priority Contact!", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(context, "New Contact Successfully Saved!", Toast.LENGTH_SHORT).show();
                     }
-                    dialog.dismiss();
                 }
                 else {
-                    Toast.makeText(context, "Please Enter complete details.", Toast.LENGTH_SHORT).show();
+                    db.addContact(contact);
+                    Toast.makeText(context, "Contact Successfully Saved as Priority Contact!", Toast.LENGTH_SHORT).show();
+
                 }
                 dialog.dismiss();
-
-
             }
+            else {
+                Toast.makeText(context, "Please Enter complete details.", Toast.LENGTH_SHORT).show();
+            }
+            dialog.dismiss();
+
+
         });
 
         dialog.show();

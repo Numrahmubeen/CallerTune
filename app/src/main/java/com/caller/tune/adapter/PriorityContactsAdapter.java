@@ -242,7 +242,7 @@ public class PriorityContactsAdapter extends RecyclerView.Adapter {
 
         @Override
         public boolean onPrepareActionMode(androidx.appcompat.view.ActionMode mode, Menu menu) {
-            mode.setTitle(R.string.app_name);
+            mode.setTitle("SELECT CONTACT");
             return false;
         }
 
