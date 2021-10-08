@@ -28,6 +28,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -316,7 +317,11 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.dialpad_call_button:
                 if (screen.getText().length() > 2) {
-                    makeCall();
+                    if(!isDefaultSimSetForCall()){
+                        selectSim();
+                    }
+                    else
+                        makeCall(-1);
                 }
                 else {
                     Toast.makeText(getContext(),"Please dial or select a number to make a call.", Toast.LENGTH_SHORT).show();
@@ -364,33 +369,32 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 //            return false;
 //    }
 //
-//    private void selectSim(){
-//        final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.dialog_select_sim);
-//
-//        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
-//        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
-//
-//        sim1_tv.setOnClickListener(v -> {
-//            makeCall(0);
-//            dialog.dismiss();
-//        });
-//        sim2_tv.setOnClickListener(v -> {
-//            makeCall(1);
-//            dialog.dismiss();
-//        });
-//        dialog.show();
-//
-//
-//    }
-    private void makeCall() {
+    private void selectSim(){
+        final BottomSheetDialog dialog = new BottomSheetDialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_select_sim);
 
+        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
+        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
+
+        sim1_tv.setOnClickListener(v -> {
+            makeCall(0);
+            dialog.dismiss();
+        });
+        sim2_tv.setOnClickListener(v -> {
+            makeCall(1);
+            dialog.dismiss();
+        });
+        dialog.show();
+
+
+    }
+
+    private void makeCall(int simNumber) {
         Intent intent = new Intent("android.intent.action.CALL",Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
         intent.setData(Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
         intent.putExtra("com.android.phone.force.slot", true);
         intent.putExtra("Cdma_Supp", true);
-        intent.setPackage("com.android.server.telecom");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             TelecomManager telecomManager = (TelecomManager) getActivity().getSystemService(Context.TELECOM_SERVICE);
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -398,9 +402,52 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{READ_PHONE_STATE}, 2);
                 return;
             }
+            intent.setPackage("com.android.server.telecom");
+            List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
+            if (simNumber == 0) {  // simNumber = 0 or 1 according to sim......
+                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 0)
+                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(0));
+            } else if(simNumber == 1) {
+                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 1)
+                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(1));
+            }
+
             startActivity(intent);
         }
-        else
-            Toast.makeText(getContext(), "Your device incompatible to make a call from this app.", Toast.LENGTH_SHORT).show();
+    }
+
+//    private void makeCall(int sim) {
+//
+//        Intent intent = new Intent("android.intent.action.CALL",Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
+//        intent.setData(Uri.parse("tel:"+Uri.encode(screen.getText().toString())));
+//        intent.putExtra("Cdma_Supp", true);
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+//            intent.setPackage("com.android.phone");
+//        }else{
+//            intent.setPackage("com.android.server.telecom");
+//        }        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+//            TelecomManager telecomManager = (TelecomManager) getActivity().getSystemService(Context.TELECOM_SERVICE);
+//            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(getContext(), "Permission required", Toast.LENGTH_SHORT).show();
+//                ActivityCompat.requestPermissions(getActivity(), new String[]{READ_PHONE_STATE}, 2);
+//                return;
+//            }
+//
+//            startActivity(intent);
+//        }
+//        else
+//            Toast.makeText(getContext(), "Your device incompatible to make a call from this app.", Toast.LENGTH_SHORT).show();
+//    }
+    boolean isDefaultSimSetForCall() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{READ_PHONE_STATE}, 2);
+        } else {
+            TelecomManager telecomManager = (TelecomManager) getActivity().getSystemService(Context.TELECOM_SERVICE);
+            PhoneAccountHandle defaultPhoneAccount = telecomManager.getDefaultOutgoingPhoneAccount(Uri.fromParts("tel", "text", null).getScheme());
+            if (defaultPhoneAccount != null) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -72,7 +73,11 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
         requestPermissionLauncher =
                 registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                     if (isGranted) {
-                        makeCall();
+                        if(!isDefaultSimSetForCall()){
+                            selectSim();
+                        }
+                        else
+                            makeCall(-1);
                     } else {
                         Toast.makeText(this, "Permission is required.", Toast.LENGTH_SHORT).show();
                     }
@@ -95,8 +100,11 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
                 requestPermissionLauncher.launch(READ_PHONE_STATE);
             } else
                 {
-                makeCall();
-            }
+                    if(!isDefaultSimSetForCall()){
+                        selectSim();
+                    }
+                    else
+                        makeCall(-1);            }
         });
         addToContacts_ll.setOnClickListener(v->{
             Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
@@ -239,23 +247,66 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
         back_iv = findViewById(R.id.callHistory_back_iv);
         gotoContactDetailsDivider_view = findViewById(R.id.callHistory_gotoContactDetails_view);
     }
+    private void selectSim(){
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_select_sim);
 
-    private void makeCall() {
+        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
+        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
+
+        sim1_tv.setOnClickListener(v -> {
+            makeCall(0);
+            dialog.dismiss();
+        });
+        sim2_tv.setOnClickListener(v -> {
+            makeCall(1);
+            dialog.dismiss();
+        });
+        dialog.show();
+
+
+    }
+
+    boolean isDefaultSimSetForCall() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{READ_PHONE_STATE}, 2);
+        } else {
+            TelecomManager telecomManager = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
+            PhoneAccountHandle defaultPhoneAccount = telecomManager.getDefaultOutgoingPhoneAccount(Uri.fromParts("tel", "text", null).getScheme());
+            if (defaultPhoneAccount != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private void makeCall(int simNumber) {
         Intent intent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + phoneNumber));
         intent.setData(Uri.parse("tel:" + phoneNumber));
         intent.putExtra("com.android.phone.force.slot", true);
         intent.putExtra("Cdma_Supp", true);
-        intent.setPackage("com.android.server.telecom");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            TelecomManager telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
+            TelecomManager telecomManager = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Permission required", Toast.LENGTH_SHORT).show();
                 ActivityCompat.requestPermissions(this, new String[]{READ_PHONE_STATE}, 2);
                 return;
             }
+            intent.setPackage("com.android.server.telecom");
             List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
+            if (simNumber == 0) {  // simNumber = 0 or 1 according to sim......
+                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 0)
+                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(0));
+            } else if(simNumber == 1) {
+                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 1)
+                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(1));
+            }
+
             startActivity(intent);
-        } else
+        }
+        else
             Toast.makeText(this, "Your device incompatible to make a call from this app.", Toast.LENGTH_SHORT).show();
     }
 }
