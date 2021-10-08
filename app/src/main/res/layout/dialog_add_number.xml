@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_10sdp"
@@ -8,23 +8,27 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/add_new_user_tv"
         android:text="Add new user"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black"
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/phone_no_tv"
         android:layout_marginTop="@dimen/_10sdp"
+        android:layout_below="@+id/add_new_user_tv"
         android:text="Phone number" />
 
     <EditText
         android:id="@+id/number_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/phone_no_tv"
         android:layout_marginTop="@dimen/_3sdp"
         android:background="@drawable/et_bg"
         android:hint="Enter phone number"
@@ -34,8 +38,10 @@
         android:textColor="@color/gray" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/name_tv"
+        android:layout_below="@+id/number_et"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_3sdp"
         android:text="Name" />
@@ -44,6 +50,7 @@
         android:id="@+id/name_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/name_tv"
         android:background="@drawable/et_bg"
         android:hint="Enter person name"
         android:paddingHorizontal="@dimen/_5sdp"
@@ -51,8 +58,10 @@
         android:textColor="@color/gray" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/number_type_tv"
+        android:layout_below="@id/name_et"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_3sdp"
         android:text="Number type" />
@@ -61,30 +70,32 @@
         android:id="@+id/numberTyp_sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/number_type_tv"
         android:background="@drawable/et_bg"
         android:entries="@array/number_type"
         android:paddingVertical="@dimen/_10sdp" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/shouldAddToPhone"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/numberTyp_sp"
         android:layout_marginTop="@dimen/_10sdp"
         android:text="also add to phone contact"
         android:textColor="@color/gray" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_below="@id/shouldAddToPhone"
+        android:gravity="end"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/cancel_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
             android:text="CANCEL"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/pink"
@@ -94,11 +105,11 @@
             android:id="@+id/add_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_20sdp"
-            android:padding="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
             android:text="ADD"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
