@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="?actionBarSize"
     android:background="@drawable/bg_call_activity"
     android:orientation="vertical"
     tools:context=".CallActivity">
