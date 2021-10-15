@@ -116,7 +116,6 @@ public class RecentCallsFragment extends Fragment {
 
     private void init() {
         recentCalls_rv.setHasFixedSize(true);
-        recentCalls_rv.setLayoutManager(new LinearLayoutManager(getContext()));
         recentCalls = new ArrayList<>();
     }
     private void setupAdapter() {

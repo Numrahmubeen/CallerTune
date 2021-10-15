@@ -68,4 +68,14 @@
             android:background="@color/light_gray_100" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/item_recentCall_call_iv"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:background="@drawable/circle_bg"
+        android:padding="10dp"
+        android:src="@drawable/ic_phone" />
 </RelativeLayout>

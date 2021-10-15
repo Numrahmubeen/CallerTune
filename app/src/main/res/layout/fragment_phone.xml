@@ -62,7 +62,7 @@
             android:paddingStart="@dimen/activity_margin"
             android:paddingEnd="@dimen/activity_margin"
             android:src="@drawable/ic_cross"
-            android:tint="@color/gray"
+            app:tint="@color/gray"
             app:layout_constraintBottom_toBottomOf="@+id/screen"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/screen" />

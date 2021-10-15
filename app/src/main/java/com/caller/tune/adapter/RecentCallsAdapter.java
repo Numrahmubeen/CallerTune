@@ -1,10 +1,12 @@
 package com.caller.tune.adapter;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.provider.CallLog;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
@@ -13,14 +15,18 @@ import android.telephony.SubscriptionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +37,7 @@ import com.caller.tune.CallHistoryDetailActivity;
 import com.caller.tune.R;
 import com.caller.tune.models.ContactModel;
 import com.caller.tune.models.RecentCall;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +45,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
+
+import static android.Manifest.permission.READ_PHONE_STATE;
 
 public class RecentCallsAdapter extends Section {
     private List<RecentCall> recentCallList;
@@ -57,6 +66,8 @@ public class RecentCallsAdapter extends Section {
         listSearch = new ArrayList<>();
         listSearch.addAll(recentCalls);
         checkFrom = check;
+
+
     }
     @Override
     public int getContentItemsTotal() {
@@ -91,6 +102,20 @@ public class RecentCallsAdapter extends Section {
                 }
             });
         }
+        else {
+            holder.call_iv.setVisibility(View.GONE);
+        }
+        holder.call_iv.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context, "READ_PHONE_STATE Permission is missing", Toast.LENGTH_SHORT).show();
+            } else
+            {
+                if(!isDefaultSimSetForCall()){
+                    selectSim(result.getPhoneNumber());
+                }
+                else
+                    makeCall(-1,result.getPhoneNumber());            }
+        });
 
         switch (result.getCallTyp()) {
             case "Outgoing":
@@ -114,7 +139,7 @@ public class RecentCallsAdapter extends Section {
         }
         TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-
+            ActivityCompat.requestPermissions((Activity) context, new String[]{READ_PHONE_STATE}, 2);
             return;
         }
         List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
@@ -137,6 +162,68 @@ public class RecentCallsAdapter extends Section {
 //            }
         }
 
+    }
+    private void selectSim(String phoneNumber){
+        final BottomSheetDialog dialog = new BottomSheetDialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_select_sim);
+
+        TextView sim1_tv = dialog.findViewById(R.id.sim1Choose_tv);
+        TextView sim2_tv = dialog.findViewById(R.id.sim2Choose_tv);
+
+        sim1_tv.setOnClickListener(v -> {
+            makeCall(0,phoneNumber);
+            dialog.dismiss();
+        });
+        sim2_tv.setOnClickListener(v -> {
+            makeCall(1,phoneNumber);
+            dialog.dismiss();
+        });
+        dialog.show();
+
+
+    }
+
+    boolean isDefaultSimSetForCall() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{READ_PHONE_STATE}, 2);
+        } else {
+            TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+            PhoneAccountHandle defaultPhoneAccount = telecomManager.getDefaultOutgoingPhoneAccount(Uri.fromParts("tel", "text", null).getScheme());
+            if (defaultPhoneAccount != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private void makeCall(int simNumber,String phoneNumber) {
+        Intent intent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + phoneNumber));
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        intent.putExtra("com.android.phone.force.slot", true);
+        intent.putExtra("Cdma_Supp", true);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context, "Permission required", Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions((Activity) context, new String[]{READ_PHONE_STATE}, 2);
+                return;
+            }
+            intent.setPackage("com.android.server.telecom");
+            List<PhoneAccountHandle> phoneAccountHandleList = telecomManager.getCallCapablePhoneAccounts();
+            if (simNumber == 0) {  // simNumber = 0 or 1 according to sim......
+                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 0)
+                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(0));
+            } else if(simNumber == 1) {
+                if (phoneAccountHandleList != null && phoneAccountHandleList.size() > 1)
+                    intent.putExtra("android.telecom.extra.PHONE_ACCOUNT_HANDLE", phoneAccountHandleList.get(1));
+            }
+
+            context.startActivity(intent);
+        }
+        else
+            Toast.makeText(context, "Your device incompatible to make a call from this app.", Toast.LENGTH_SHORT).show();
     }
     public void filter(String text) {
         recentCallList.clear();
@@ -175,8 +262,9 @@ public class RecentCallsAdapter extends Section {
     public class RecentCallsViewHolder extends RecyclerView.ViewHolder {
 
         TextView contactName, callTime;
-        ImageView callType_iv, sim_iv;
+        ImageView callType_iv, sim_iv, call_iv;
         RelativeLayout container_rl;
+
 
         public RecentCallsViewHolder(View itemView) {
             super(itemView);
@@ -186,6 +274,7 @@ public class RecentCallsAdapter extends Section {
             callType_iv = itemView.findViewById(R.id.callType_iv);
             sim_iv = itemView.findViewById(R.id.callSim_iv);
             container_rl = itemView.findViewById(R.id.item_recent_calls_rv);
+            call_iv = itemView.findViewById(R.id.item_recentCall_call_iv);
         }
     }
 }
