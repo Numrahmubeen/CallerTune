@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.caller.tune">
+    package="com.appsuite.prioritycontacts">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -22,7 +22,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CallerTune">
-        <activity android:name=".FAQsActivity" android:label="FAQ" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".SplashActivity"
+            android:theme="@style/NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FAQsActivity"
+            android:label="FAQ"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AboutUsActivity"
             android:label="About Us"
@@ -42,11 +53,7 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/material_no_action_bar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
 
                 <!-- Handle links from other applications -->

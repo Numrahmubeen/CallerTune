@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.caller.tune"
+        applicationId "com.appsuite.prioritycontacts"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
