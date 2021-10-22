@@ -103,8 +103,8 @@
         <me.mutasem.slidetoanswer.SwipeToAnswerView
             android:id="@+id/answer_call_iv"
             android:layout_marginStart="@dimen/_20sdp"
-            android:paddingRight="@dimen/_20sdp"
-            android:layout_width="wrap_content"
+            android:paddingEnd="@dimen/_30sdp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1" />
@@ -112,8 +112,8 @@
         <me.mutasem.slidetoanswer.SwipeToAnswerView
             android:id="@+id/reject_call_iv"
             android:layout_marginEnd="@dimen/_20sdp"
-            android:paddingLeft="@dimen/_20sdp"
-            android:layout_width="wrap_content"
+            android:paddingEnd="@dimen/_30sdp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:icon="@drawable/ic_decline"

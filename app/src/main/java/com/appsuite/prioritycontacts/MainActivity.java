@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.telecom.TelecomManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 
 import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.service.notification.Condition.SCHEME;
 import static android.telecom.TelecomManager.ACTION_CHANGE_DEFAULT_DIALER;
 import static android.telecom.TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME;
 
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity((new Intent(ACTION_CHANGE_DEFAULT_DIALER)).putExtra(EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, this.getPackageName()));
             }
         }
+
         //inflating tab layout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         //displaying tabs
@@ -119,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
 
     private void managePermissions() {
         requestMultiplePermissionsContract = new ActivityResultContracts.RequestMultiplePermissions();

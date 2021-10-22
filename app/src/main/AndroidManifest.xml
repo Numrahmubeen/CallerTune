@@ -49,6 +49,9 @@
             android:name=".CallActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=""
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:launchMode="singleInstance"
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".MainActivity"

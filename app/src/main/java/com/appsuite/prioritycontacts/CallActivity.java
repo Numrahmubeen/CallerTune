@@ -60,6 +60,15 @@ public class CallActivity extends AppCompatActivity {
     private LinearLayout callRinging_ll;
     private boolean enableHold = false,enableMute = false;
 
+//    @Override
+//    public void onAttachedToWindow() {
+//        super.onAttachedToWindow();
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
+//                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
+//                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|
+//                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+//    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +80,6 @@ public class CallActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
-
-        setContentView(R.layout.activity_call);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
         {
@@ -86,8 +93,11 @@ public class CallActivity extends AppCompatActivity {
         {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+        setContentView(R.layout.activity_call);
+
         Preference preference = new Preference(this);
 
         bindView();
@@ -105,6 +115,8 @@ public class CallActivity extends AppCompatActivity {
 
 
     }
+
+
 
     private void clickListeners() {
         answerCall_iv.setSlideListner(() ->
