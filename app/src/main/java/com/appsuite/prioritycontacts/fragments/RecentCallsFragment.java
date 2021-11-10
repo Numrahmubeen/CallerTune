@@ -75,35 +75,16 @@ public class RecentCallsFragment extends Fragment {
         recentCalls_rv = view.findViewById(R.id.recent_calls_rv);
         progressBar = view.findViewById(R.id.recent_calls_pb);
         callLogViewModel = new CallLogViewModel(getActivity().getApplication());
-        ActivityResultLauncher<String> requestPermissionLauncher =
-                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                    if (isGranted) {
-//                        getRecentCalls();
-                        getRecentCalls();
 
-                    } else {
-                        Toast.makeText(getContext(), "Permission is required.", Toast.LENGTH_SHORT).show();
-                    }
-                });
         ContentObserver contentObserver = new ContentObserver(new Handler()) {
             @Override
             public void onChange(boolean selfChange) {
-                // if there're any changes then perform the request and update the UI
-//                if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
-//                    requestPermissionLauncher.launch(READ_CALL_LOG);
-//                } else {
                     getRecentCalls();
-                //}
             }
         };
         getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,true,contentObserver);
         init();
-
-//        if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
-//            requestPermissionLauncher.launch(READ_CALL_LOG);
-//        } else {
-            getRecentCalls();
-       // }
+        getRecentCalls();
         return view;
     }
 

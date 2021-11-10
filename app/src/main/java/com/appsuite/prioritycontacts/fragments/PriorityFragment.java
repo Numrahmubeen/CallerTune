@@ -101,6 +101,12 @@ public class PriorityFragment extends Fragment {
         refreshRV();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        refreshRV();
+    }
+
     public void refreshRV(){
         priorityList.clear();
         priorityList.addAll(db.getAllContacts());
