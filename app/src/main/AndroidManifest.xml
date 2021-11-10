@@ -22,7 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CallerTune">
-        <activity android:name=".SplashActivity"
+        <activity android:name=".PermissionActivity"></activity>
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,15 +50,14 @@
         <activity
             android:name=".CallActivity"
             android:excludeFromRecents="true"
-            android:taskAffinity=""
+            android:launchMode="singleInstance"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
-            android:launchMode="singleInstance"
+            android:taskAffinity=""
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/material_no_action_bar">
-
             <intent-filter>
 
                 <!-- Handle links from other applications -->

@@ -1,5 +1,6 @@
 package com.appsuite.prioritycontacts.fragments;
 
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,13 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.telecom.TelecomManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.appsuite.prioritycontacts.MainActivity;
+import com.appsuite.prioritycontacts.PermissionActivity;
 import com.appsuite.prioritycontacts.R;
+import com.appsuite.prioritycontacts.SplashActivity;
 import com.appsuite.prioritycontacts.adapter.RecentCallsAdapter;
 import com.appsuite.prioritycontacts.models.RecentCall;
 import com.appsuite.prioritycontacts.viewModels.CallLogViewModel;
@@ -36,6 +41,7 @@ import java.util.Map;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 import static android.Manifest.permission.READ_CALL_LOG;
+import static android.content.Context.TELECOM_SERVICE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class RecentCallsFragment extends Fragment {
@@ -83,21 +89,21 @@ public class RecentCallsFragment extends Fragment {
             @Override
             public void onChange(boolean selfChange) {
                 // if there're any changes then perform the request and update the UI
-                if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
-                    requestPermissionLauncher.launch(READ_CALL_LOG);
-                } else {
+//                if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
+//                    requestPermissionLauncher.launch(READ_CALL_LOG);
+//                } else {
                     getRecentCalls();
-                }
+                //}
             }
         };
         getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,true,contentObserver);
         init();
 
-        if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(READ_CALL_LOG);
-        } else {
+//        if (ContextCompat.checkSelfPermission(getContext(), READ_CALL_LOG) != PERMISSION_GRANTED) {
+//            requestPermissionLauncher.launch(READ_CALL_LOG);
+//        } else {
             getRecentCalls();
-        }
+       // }
         return view;
     }
 
@@ -105,6 +111,20 @@ public class RecentCallsFragment extends Fragment {
         recentCalls_rv.setHasFixedSize(true);
         recentCalls = new ArrayList<>();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TelecomManager telecomManager = (TelecomManager) getContext().getSystemService(TELECOM_SERVICE);
+            if (!getContext().getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                Intent intent = new Intent(getContext(), PermissionActivity.class);
+                getContext().startActivity(intent);
+                getActivity().finish();
+            }
+        }
+    }
+
     private void setupAdapter() {
         sectionedAdapter = new SectionedRecyclerViewAdapter();
 

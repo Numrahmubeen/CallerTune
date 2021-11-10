@@ -61,18 +61,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityResultContracts.RequestMultiplePermissions requestMultiplePermissionsContract;
     private ActivityResultLauncher<String[]> multiplePermissionActivityResultLauncher;
 
+//    final String[] PERMISSIONS = {
+//            Manifest.permission.CALL_PHONE,
+//            Manifest.permission.READ_PHONE_STATE,
+//            Manifest.permission.READ_CONTACTS,
+//            Manifest.permission.WRITE_CONTACTS,
+//            Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+//            Manifest.permission.READ_CALL_LOG,
+//            Manifest.permission.WRITE_CALL_LOG,
+//            Manifest.permission.MODIFY_AUDIO_SETTINGS,
+//            Manifest.permission.USE_FULL_SCREEN_INTENT,
+//            Manifest.permission.DISABLE_KEYGUARD
+//    };
     final String[] PERMISSIONS = {
             Manifest.permission.CALL_PHONE,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
             Manifest.permission.ACCESS_NOTIFICATION_POLICY,
-            Manifest.permission.READ_CALL_LOG,
-            Manifest.permission.WRITE_CALL_LOG,
             Manifest.permission.MODIFY_AUDIO_SETTINGS,
             Manifest.permission.USE_FULL_SCREEN_INTENT,
             Manifest.permission.DISABLE_KEYGUARD
-
     };
 
     @Override
@@ -101,15 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager = findViewById(R.id.mypager);
         pagerAdapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            RoleManager rm = (RoleManager) this.getSystemService(Context.ROLE_SERVICE);
-            startActivityForResult(rm.createRequestRoleIntent(RoleManager.ROLE_DIALER), 120);
-        } else {
-            TelecomManager systemService = this.getSystemService(TelecomManager.class);
-            if (systemService != null && !systemService.getDefaultDialerPackage().equals(this.getPackageName())) {
-                startActivity((new Intent(ACTION_CHANGE_DEFAULT_DIALER)).putExtra(EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, this.getPackageName()));
-            }
-        }
+
 
         //inflating tab layout
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
