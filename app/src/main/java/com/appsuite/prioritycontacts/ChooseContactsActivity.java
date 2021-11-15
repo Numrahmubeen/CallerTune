@@ -14,7 +14,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.telecom.TelecomManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,6 +52,19 @@ public class ChooseContactsActivity extends AppCompatActivity{
     private TextView noContacts_tv;
     private Toolbar toolbar;
     private ContactViewModel contactViewModel;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TelecomManager telecomManager = (TelecomManager) getSystemService(TELECOM_SERVICE);
+            if (!getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                Intent intent = new Intent(this, PermissionActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

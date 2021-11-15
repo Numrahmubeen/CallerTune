@@ -71,6 +71,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Manifest.permission.USE_FULL_SCREEN_INTENT,
             Manifest.permission.DISABLE_KEYGUARD
     };
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TelecomManager telecomManager = (TelecomManager) getSystemService(TELECOM_SERVICE);
+            if (!getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                Intent intent = new Intent(this, PermissionActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

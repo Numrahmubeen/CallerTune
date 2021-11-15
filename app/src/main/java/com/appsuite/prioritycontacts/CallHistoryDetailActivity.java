@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telecom.PhoneAccountHandle;
@@ -57,6 +58,19 @@ public class CallHistoryDetailActivity extends AppCompatActivity {
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private View gotoContactDetailsDivider_view;
     private SectionedRecyclerViewAdapter sectionedAdapter;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TelecomManager telecomManager = (TelecomManager) getSystemService(TELECOM_SERVICE);
+            if (!getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                Intent intent = new Intent(this, PermissionActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

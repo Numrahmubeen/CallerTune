@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -34,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsuite.prioritycontacts.PermissionActivity;
 import com.appsuite.prioritycontacts.R;
 import com.appsuite.prioritycontacts.adapter.PhoneContactsAdapter;
 import com.appsuite.prioritycontacts.models.ContactModel;
@@ -46,6 +48,7 @@ import java.util.List;
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.content.Context.TELECOM_SERVICE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class PhoneFragment extends Fragment implements View.OnClickListener {
@@ -64,7 +67,18 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
     public PhoneFragment() {
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TelecomManager telecomManager = (TelecomManager) getContext().getSystemService(TELECOM_SERVICE);
+            if (!getContext().getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                Intent intent = new Intent(getContext(), PermissionActivity.class);
+                getContext().startActivity(intent);
+                getActivity().finish();
+            }
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

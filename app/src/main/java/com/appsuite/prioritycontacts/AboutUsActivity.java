@@ -6,7 +6,9 @@ import androidx.cardview.widget.CardView;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.telecom.TelecomManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -65,5 +67,18 @@ public class AboutUsActivity extends AppCompatActivity {
             }
 
         });
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TelecomManager telecomManager = (TelecomManager) getSystemService(TELECOM_SERVICE);
+            if (!getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                Intent intent = new Intent(this, PermissionActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
     }
 }

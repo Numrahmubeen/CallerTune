@@ -94,8 +94,8 @@ public class RecentCallsFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             TelecomManager telecomManager = (TelecomManager) getContext().getSystemService(TELECOM_SERVICE);
             if (!getContext().getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {

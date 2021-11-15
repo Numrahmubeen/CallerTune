@@ -2,12 +2,14 @@ package com.appsuite.prioritycontacts.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.telecom.TelecomManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.appsuite.prioritycontacts.ChooseContactsActivity;
+import com.appsuite.prioritycontacts.PermissionActivity;
 import com.appsuite.prioritycontacts.R;
 import com.appsuite.prioritycontacts.adapter.PriorityContactsAdapter;
 import com.appsuite.prioritycontacts.data.MyDbHandler;
@@ -24,6 +27,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import static android.content.Context.TELECOM_SERVICE;
 
 
 public class PriorityFragment extends Fragment {
@@ -87,7 +92,18 @@ public class PriorityFragment extends Fragment {
         return view;
 
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            TelecomManager telecomManager = (TelecomManager) getContext().getSystemService(TELECOM_SERVICE);
+            if (!getContext().getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                Intent intent = new Intent(getContext(), PermissionActivity.class);
+                getContext().startActivity(intent);
+                getActivity().finish();
+            }
+        }
+    }
     public void onPause() {
         super.onPause();
         if (PriorityContactsAdapter.actionMode != null) {
