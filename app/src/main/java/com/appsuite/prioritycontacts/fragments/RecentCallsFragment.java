@@ -70,8 +70,10 @@ public class RecentCallsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recent_calls, container, false);
+        try{
         recentCalls_rv = view.findViewById(R.id.recent_calls_rv);
         progressBar = view.findViewById(R.id.recent_calls_pb);
         callLogViewModel = new CallLogViewModel(getActivity().getApplication());
@@ -85,6 +87,16 @@ public class RecentCallsFragment extends Fragment {
         getActivity().getContentResolver().registerContentObserver(CallLog.Calls.CONTENT_URI,true,contentObserver);
         init();
         getRecentCalls();
+        }catch (Exception e){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                TelecomManager telecomManager = (TelecomManager) getContext().getSystemService(TELECOM_SERVICE);
+                if (!getContext().getApplicationContext().getPackageName().equals(telecomManager.getDefaultDialerPackage())) {
+                    Intent intent = new Intent(getContext(), PermissionActivity.class);
+                    getContext().startActivity(intent);
+                    getActivity().finish();
+                }
+            }
+        }
         return view;
     }
 
