@@ -103,6 +103,8 @@ public class PriorityFragment extends Fragment {
                 getActivity().finish();
             }
         }
+        refreshRV();
+
     }
     public void onPause() {
         super.onPause();
@@ -110,11 +112,6 @@ public class PriorityFragment extends Fragment {
             PriorityContactsAdapter.actionMode.finish();
             PriorityContactsAdapter.actionMode = null;
         }
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        refreshRV();
     }
 
     @Override
